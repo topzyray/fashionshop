@@ -12,12 +12,11 @@ import {
 import { Fragment, useContext } from "react";
 import CommonModal from "./CommonModal";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import Cookies from "js-cookie";
+import { Router } from "next/router";
+import { useRouter } from "next/navigation";
 
 const isAdminView = false;
-const isAuthUser = false;
-const user = {
-  role: "admin",
-};
 
 function NavItems({ isModalView = false }) {
   return (
@@ -55,8 +54,19 @@ function NavItems({ isModalView = false }) {
 }
 
 export default function Navbar() {
+  const router = useRouter();
   const { showNavModal, setShowNavModal } =
     useContext<GlobalStateContextType>(GlobalContext);
+  const { isAuthUser, user, setIsAuthUser, setUser } =
+    useContext<GlobalStateContextType>(GlobalContext);
+
+  const handleLogout = () => {
+    setIsAuthUser(false);
+    setUser(null);
+    Cookies.remove("token");
+    localStorage.clear();
+    router.push("/");
+  };
 
   return (
     <>
@@ -82,9 +92,16 @@ export default function Navbar() {
               )
             ) : null}
             {isAuthUser ? (
-              <button className="btn-small">Logout</button>
+              <button onClick={handleLogout} className="btn-small">
+                Logout
+              </button>
             ) : (
-              <button className="btn-small">Login</button>
+              <button
+                onClick={() => router.push("/login")}
+                className="btn-small"
+              >
+                Login
+              </button>
             )}
 
             {/* Hamburger Menu */}
