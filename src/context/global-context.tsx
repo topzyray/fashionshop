@@ -19,6 +19,18 @@ type GlobalContextType = {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   isAdminView: boolean;
   setIsAdminView: React.Dispatch<React.SetStateAction<boolean>>;
+  pageLevelLoader: boolean;
+  setPageLevelLoader: React.Dispatch<React.SetStateAction<boolean>>;
+  componentLevelLoader: {
+    loading: boolean;
+    id: string;
+  };
+  setComponentLevelLoader: React.Dispatch<
+    React.SetStateAction<{
+      loading: boolean;
+      id: string;
+    }>
+  >;
 };
 
 type GlobalContextProviderProps = {
@@ -29,6 +41,11 @@ export const GlobalContext = createContext({} as GlobalContextType); // Type ass
 
 export default function GlobalState({ children }: GlobalContextProviderProps) {
   const [showNavModal, setShowNavModal] = useState<boolean>(false);
+  const [pageLevelLoader, setPageLevelLoader] = useState<boolean>(false);
+  const [componentLevelLoader, setComponentLevelLoader] = useState({
+    loading: false,
+    id: "",
+  });
   const [isAuthUser, setIsAuthUser] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const [isAdminView, setIsAdminView] = useState<boolean>(false);
@@ -68,6 +85,10 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
         setUser,
         isAdminView,
         setIsAdminView,
+        pageLevelLoader,
+        setPageLevelLoader,
+        componentLevelLoader,
+        setComponentLevelLoader,
       }}
     >
       {children}

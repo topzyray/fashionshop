@@ -5,8 +5,11 @@ import { GlobalContext } from "@/context/global-context";
 import { loginUser } from "@/services/login";
 import { loginFormControls } from "@/utils";
 import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import ComponentLevelLoader from "@/components/Loaders/ComponentLevelLoader";
+import Notification from "@/components/Notification";
+import { toast, ToastPosition } from "react-toastify";
 
 type InitialFormDataType = {
   email: string;
@@ -22,7 +25,13 @@ export default function Login() {
   const router = useRouter();
   const [formData, setFormData] =
     useState<InitialFormDataType>(initialFormData);
-  const { setIsAuthUser, setUser } = useContext(GlobalContext);
+  const {
+    isAuthUser,
+    setIsAuthUser,
+    setUser,
+    componentLevelLoader,
+    setComponentLevelLoader,
+  } = useContext(GlobalContext);
 
   const validateFormInput = () => {
     return formData &&
@@ -35,24 +44,37 @@ export default function Login() {
   };
 
   const handleFormSubmit = async () => {
+    setComponentLevelLoader({ loading: true, id: "" });
     const response = await loginUser(formData);
     if (response.success) {
+      // Display toast message
+      toast.success(response.message, {
+        position: "top-right" as ToastPosition,
+      });
+
       setIsAuthUser(true);
       setUser(response?.data?.user);
       setFormData(initialFormData);
       Cookies.set("token", response?.data?.token);
       localStorage.setItem("user", JSON.stringify(response?.data?.user));
+      setComponentLevelLoader({ loading: false, id: "" });
       router.push("/");
     } else {
+      // Display toast message
+      toast.error(response.message, {
+        position: "top-right" as ToastPosition,
+      });
+
       setIsAuthUser(false);
+      setComponentLevelLoader({ loading: false, id: "" });
     }
   };
 
-  // useEffect(() => {
-  //   if (isAuthUser) {
-  //     router.push("/");
-  //   }
-  // }, [isAuthUser]);
+  useEffect(() => {
+    if (isAuthUser) {
+      router.push("/");
+    }
+  }, [isAuthUser]);
 
   return (
     <section className="bg-white relative h-screen">
@@ -89,7 +111,17 @@ export default function Login() {
                   disabled={!validateFormInput()}
                   className="btn-large"
                 >
-                  Login
+                  {componentLevelLoader && componentLevelLoader.loading ? (
+                    <ComponentLevelLoader
+                      text="Logging In"
+                      color="#ffffff"
+                      loading={
+                        componentLevelLoader && componentLevelLoader.loading
+                      }
+                    />
+                  ) : (
+                    "Login"
+                  )}
                 </button>
                 <div className="flex flex-col gap-2">
                   <p>New to website?</p>
@@ -105,6 +137,7 @@ export default function Login() {
           </div>
         </div>
       </div>
+      <Notification />
     </section>
   );
 }

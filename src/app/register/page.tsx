@@ -2,12 +2,14 @@
 
 import InputComponent from "@/components/FormElements/InputComponent";
 import SelectComponent from "@/components/FormElements/SelectComponent";
+import ComponentLevelLoader from "@/components/Loaders/ComponentLevelLoader";
+import Notification from "@/components/Notification";
+import { GlobalContext } from "@/context/global-context";
 import { registerNewUser } from "@/services/register";
 import { registrationFormControls } from "@/utils";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-
-const isRegisterd = false;
+import { useContext, useEffect, useState } from "react";
+import { toast, ToastPosition } from "react-toastify";
 
 type InitialFormDataType = {
   name: string;
@@ -27,6 +29,9 @@ export default function Register() {
   const router = useRouter();
   const [formData, setFormData] =
     useState<InitialFormDataType>(initialFormData);
+  const { isAuthUser, componentLevelLoader, setComponentLevelLoader } =
+    useContext(GlobalContext);
+  const [isRegistered, setIsRegistered] = useState<boolean>(false);
 
   const validateFormInput = () => {
     return formData &&
@@ -43,9 +48,31 @@ export default function Register() {
   };
 
   const handleFormSubmit = async () => {
-    const data = await registerNewUser(formData);
-    console.log(data);
+    setComponentLevelLoader({ loading: true, id: "" });
+    const response = await registerNewUser(formData);
+    if (response.success) {
+      // Display toast message
+      toast.success(response.message, {
+        position: "top-right" as ToastPosition,
+      });
+
+      setFormData(initialFormData);
+      setComponentLevelLoader({ loading: false, id: "" });
+      setIsRegistered(true);
+    } else {
+      // Display toast message
+      toast.error(response.message, {
+        position: "top-right" as ToastPosition,
+      });
+      setComponentLevelLoader({ loading: false, id: "" });
+    }
   };
+
+  useEffect(() => {
+    if (isAuthUser) {
+      router.push("/");
+    }
+  }, [isAuthUser]);
 
   return (
     <section className="bg-white relative h-screen">
@@ -54,12 +81,17 @@ export default function Register() {
           <div className="w-full mt-10 mr-0 mb-0 ml-0 relative max-w-2xl lg:mt-0 lg:w-5/12">
             <div className="flex flex-col items-center justify-start pr-4 pl-4 pt-10 md:pr-10 pb-10 md:pl-10 bg-white md:shadow-2xl rounded-xl relative z-10">
               <p className="w-full text-4xl font-medium text-center font-serif">
-                {isRegisterd
+                {isRegistered
                   ? "Registeration Successfull"
                   : "Sign up for an account"}
               </p>
-              {isRegisterd ? (
-                <button className="btn-large">Login</button>
+              {isRegistered ? (
+                <button
+                  onClick={() => router.push("/login")}
+                  className="btn-large mt-4"
+                >
+                  Login
+                </button>
               ) : (
                 <div className="w-full mt-6 mr-0 ml-0 relative space-y-8">
                   {registrationFormControls.map((controlItem) =>
@@ -105,7 +137,17 @@ export default function Register() {
                     disabled={!validateFormInput()}
                     className="btn-large"
                   >
-                    Register
+                    {componentLevelLoader && componentLevelLoader.loading ? (
+                      <ComponentLevelLoader
+                        text="Registering"
+                        color="#ffffff"
+                        loading={
+                          componentLevelLoader && componentLevelLoader.loading
+                        }
+                      />
+                    ) : (
+                      "Register"
+                    )}
                   </button>
                   <div className="flex flex-col gap-2">
                     <p>Already registered?</p>
@@ -122,6 +164,7 @@ export default function Register() {
           </div>
         </div>
       </div>
+      <Notification />
     </section>
   );
 }
