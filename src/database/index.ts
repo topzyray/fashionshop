@@ -1,21 +1,44 @@
-import mongoose, { ConnectOptions } from "mongoose";
+import "server-only";
+import mongoose from "mongoose";
 
-const configOptions: ConnectOptions = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
+declare global {
+  var mongoose: any; // This must be a `var` and not a `let / const`
+}
 
-const connectToDB = async () => {
-  const connectionUrl =
-    process.env.DB_URL ||
-    "mongodb+srv://admin-wakode:e3q18nPtrqcpOs8P@wakode0.4fltn8x.mongodb.net/fashionshop?retryWrites=true&w=majority";
+const MONGODB_URI = process.env.MONGODB_URI;
 
-  mongoose
-    .connect(connectionUrl, configOptions)
-    .then(() => console.log("FashionShop database connected successfully."))
-    .catch((err) =>
-      console.log(`Error connceting to database: ${err.message}`)
-    );
-};
+if (!MONGODB_URI) {
+  throw new Error(
+    "Please define the MONGODB_URI environment variable inside .env.local"
+  );
+}
 
-export default connectToDB;
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
+export default async function connectToDB() {
+  if (cached.conn) {
+    return cached.conn;
+  }
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+    };
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      console.log("Database connection established.");
+
+      return mongoose;
+    });
+  }
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
+
+  return cached.conn;
+}

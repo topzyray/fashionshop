@@ -41,6 +41,8 @@ export default function Register() {
   };
 
   const handleFormSubmit = async () => {
+    console.log(formData);
+
     const data = await registerNewUser(formData);
     console.log(data);
   };

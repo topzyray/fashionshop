@@ -1,13 +1,11 @@
-type RegisterNewUserType = {
-  name: string;
+type LoginNewUserType = {
   email: string;
   password: string;
-  role: string;
 };
 
-export const registerNewUser = async (formData: RegisterNewUserType) => {
+export const loginUser = async (formData: LoginNewUserType) => {
   try {
-    const response = await fetch("/api/register", {
+    const response = await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
