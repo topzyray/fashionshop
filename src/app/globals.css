@@ -26,6 +26,19 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+body::-webkit-scrollbar {
+  width: 5px;
+}
+
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -34,6 +47,6 @@ body {
 
 @layer components {
   .btn {
-    @apply mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white rounded-md hover:opacity-80 transition-all ease-in-out duration-300;
+    @apply mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white hover:opacity-80 transition-all ease-in-out duration-300;
   }
 }

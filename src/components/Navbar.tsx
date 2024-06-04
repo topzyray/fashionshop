@@ -14,7 +14,7 @@ import CommonModal from "./CommonModal";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 
 const isAdminView = false;
-const isAuthUser = true;
+const isAuthUser = false;
 const user = {
   role: "admin",
 };
@@ -74,7 +74,7 @@ export default function Navbar() {
                 <button className="btn">Cart</button>
               </Fragment>
             ) : null}
-            {user?.role === "admin" ? (
+            {user?.role === "admin" && isAuthUser ? (
               isAdminView ? (
                 <button className="btn">Client View</button>
               ) : (

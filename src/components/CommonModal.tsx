@@ -30,7 +30,7 @@ export default function CommonModal({
 }: CommonModalProps) {
   return (
     <Transition show={show} as={Fragment}>
-      <Dialog onClose={setShow} as="div" className={"relativez-10"}>
+      <Dialog onClose={setShow} as="div" className={"relative z-10"}>
         <TransitionChild
           as={Fragment}
           enter="ease-in-out duration-900"
