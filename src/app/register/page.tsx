@@ -4,6 +4,7 @@ import InputComponent from "@/components/FormElements/InputComponent";
 import SelectComponent from "@/components/FormElements/SelectComponent";
 import { registerNewUser } from "@/services/register";
 import { registrationFormControls } from "@/utils";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const isRegisterd = false;
@@ -23,6 +24,7 @@ const initialFormData = {
 };
 
 export default function Register() {
+  const router = useRouter();
   const [formData, setFormData] =
     useState<InitialFormDataType>(initialFormData);
 
@@ -41,8 +43,6 @@ export default function Register() {
   };
 
   const handleFormSubmit = async () => {
-    console.log(formData);
-
     const data = await registerNewUser(formData);
     console.log(data);
   };
@@ -59,9 +59,7 @@ export default function Register() {
                   : "Sign up for an account"}
               </p>
               {isRegisterd ? (
-                <button className="inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-300 ease-in-out focus:shadow hover:opacity-80 font-medium uppercase tracking-wide ">
-                  Login
-                </button>
+                <button className="btn-large">Login</button>
               ) : (
                 <div className="w-full mt-6 mr-0 ml-0 relative space-y-8">
                   {registrationFormControls.map((controlItem) =>
@@ -105,10 +103,19 @@ export default function Register() {
                   <button
                     onClick={handleFormSubmit}
                     disabled={!validateFormInput()}
-                    className="disabled:opacity-50 disabled:cursor-not-allowed inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-300 ease-in-out focus:shadow hover:opacity-80 font-medium uppercase tracking-wide"
+                    className="btn-large"
                   >
                     Register
                   </button>
+                  <div className="flex flex-col gap-2">
+                    <p>Already registered?</p>
+                    <button
+                      onClick={() => router.push("/login")}
+                      className="btn-large"
+                    >
+                      Login
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

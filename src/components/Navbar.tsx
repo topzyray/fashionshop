@@ -70,21 +70,21 @@ export default function Navbar() {
           <div className="flex md:order-2 gap-2">
             {!isAdminView && isAuthUser ? (
               <Fragment>
-                <button className="btn">Account</button>
-                <button className="btn">Cart</button>
+                <button className="btn-small">Account</button>
+                <button className="btn-small">Cart</button>
               </Fragment>
             ) : null}
             {user?.role === "admin" && isAuthUser ? (
               isAdminView ? (
-                <button className="btn">Client View</button>
+                <button className="btn-small">Client View</button>
               ) : (
-                <button className="btn">Admin View</button>
+                <button className="btn-small">Admin View</button>
               )
             ) : null}
             {isAuthUser ? (
-              <button className="btn">Logout</button>
+              <button className="btn-small">Logout</button>
             ) : (
-              <button className="btn">Login</button>
+              <button className="btn-small">Login</button>
             )}
 
             {/* Hamburger Menu */}

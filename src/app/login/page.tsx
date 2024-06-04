@@ -2,13 +2,40 @@
 
 import InputComponent from "@/components/FormElements/InputComponent";
 import SelectComponent from "@/components/FormElements/SelectComponent";
+import { loginUser } from "@/services/login";
 import { loginFormControls, registrationFormControls } from "@/utils";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-const isLoggedIn = false;
+type InitialFormDataType = {
+  email: string;
+  password: string;
+};
+
+const initialFormData = {
+  email: "",
+  password: "",
+};
 
 export default function Login() {
   const router = useRouter();
+  const [formData, setFormData] =
+    useState<InitialFormDataType>(initialFormData);
+
+  const validateFormInput = () => {
+    return formData &&
+      formData.email &&
+      formData.email.trim() !== "" &&
+      formData.password &&
+      formData.password.trim() !== ""
+      ? true
+      : false;
+  };
+
+  const handleFormSubmit = async () => {
+    const data = await loginUser(formData);
+    console.log(data);
+  };
 
   return (
     <section className="bg-white relative h-screen">
@@ -28,17 +55,30 @@ export default function Login() {
                       type={controlItem.type}
                       placeholder={controlItem.placeholder}
                       label={controlItem.label}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          [controlItem.id]: e.target.value,
+                        })
+                      }
+                      value={
+                        formData[controlItem.id as keyof typeof initialFormData]
+                      }
                     />
                   ) : null
                 )}
-                <button className="inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-300 ease-in-out focus:shadow hover:opacity-80 font-medium uppercase tracking-wide">
+                <button
+                  onClick={handleFormSubmit}
+                  disabled={!validateFormInput()}
+                  className="btn-large"
+                >
                   Login
                 </button>
                 <div className="flex flex-col gap-2">
                   <p>New to website?</p>
                   <button
                     onClick={() => router.push("/register")}
-                    className="inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-300 ease-in-out focus:shadow hover:opacity-80 font-medium uppercase tracking-wide"
+                    className="btn-large"
                   >
                     Register
                   </button>
