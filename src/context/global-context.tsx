@@ -3,39 +3,35 @@
 import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
-type GlobalStateProps = {
+export type User = {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+};
+
+type GlobalContextType = {
+  showNavModal: boolean;
+  setShowNavModal: React.Dispatch<React.SetStateAction<boolean>>;
+  isAuthUser: boolean;
+  setIsAuthUser: React.Dispatch<React.SetStateAction<boolean>>;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  isAdminView: boolean;
+  setIsAdminView: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+type GlobalContextProviderProps = {
   children: React.ReactNode;
 };
 
-type UserType = {
-  success: boolean;
-  message: string;
-  user: {
-    token: string;
-    data: {
-      _id: string;
-      name: string;
-      email: string;
-      role: string;
-    };
-  };
-};
+export const GlobalContext = createContext({} as GlobalContextType); // Type assertion
 
-export type GlobalStateContextType = {
-  showNavModal: boolean;
-  setShowNavModal: React.Dispatch<React.SetStateAction<boolean>>;
-  isAuthUser: boolean | null;
-  setIsAuthUser: React.Dispatch<React.SetStateAction<boolean | null>>;
-  user: UserType | null;
-  setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
-};
-
-export const GlobalContext = createContext<GlobalStateContextType | null>(null);
-
-export default function GlobalState({ children }: GlobalStateProps) {
+export default function GlobalState({ children }: GlobalContextProviderProps) {
   const [showNavModal, setShowNavModal] = useState<boolean>(false);
-  const [isAuthUser, setIsAuthUser] = useState<boolean | null>(null);
-  const [user, setUser] = useState<UserType | null>(null);
+  const [isAuthUser, setIsAuthUser] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isAdminView, setIsAdminView] = useState<boolean>(false);
 
   useEffect(() => {
     if (Cookies.get("token") !== undefined) {
@@ -70,6 +66,8 @@ export default function GlobalState({ children }: GlobalStateProps) {
         setIsAuthUser,
         user,
         setUser,
+        isAdminView,
+        setIsAdminView,
       }}
     >
       {children}

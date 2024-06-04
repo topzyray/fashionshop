@@ -1,24 +1,22 @@
 "use client";
 
-import {
-  GlobalContext,
-  GlobalStateContextType,
-} from "@/context/global-context";
+import { Fragment, useContext } from "react";
+import { GlobalContext } from "@/context/global-context";
 import {
   adminNavOptions,
   clientNavOptions,
   NavOptionsType,
 } from "@/utils/index";
-import { Fragment, useContext } from "react";
 import CommonModal from "./CommonModal";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import Cookies from "js-cookie";
-import { Router } from "next/router";
 import { useRouter } from "next/navigation";
 
-const isAdminView = false;
+// const isAdminView = false;
 
 function NavItems({ isModalView = false }) {
+  const { isAdminView } = useContext(GlobalContext);
+
   return (
     <div
       className={`items-center justify-between w-full md:flex md:w-auto ${
@@ -55,10 +53,16 @@ function NavItems({ isModalView = false }) {
 
 export default function Navbar() {
   const router = useRouter();
-  const { showNavModal, setShowNavModal } =
-    useContext<GlobalStateContextType>(GlobalContext);
-  const { isAuthUser, user, setIsAuthUser, setUser } =
-    useContext<GlobalStateContextType>(GlobalContext);
+  const {
+    showNavModal,
+    setShowNavModal,
+    isAuthUser,
+    setIsAuthUser,
+    user,
+    setUser,
+    isAdminView,
+    setIsAdminView,
+  } = useContext(GlobalContext);
 
   const handleLogout = () => {
     setIsAuthUser(false);
@@ -86,9 +90,19 @@ export default function Navbar() {
             ) : null}
             {user?.role === "admin" && isAuthUser ? (
               isAdminView ? (
-                <button className="btn-small">Client View</button>
+                <button
+                  onClick={() => setIsAdminView(false)}
+                  className="btn-small"
+                >
+                  Client View
+                </button>
               ) : (
-                <button className="btn-small">Admin View</button>
+                <button
+                  onClick={() => setIsAdminView(true)}
+                  className="btn-small"
+                >
+                  Admin View
+                </button>
               )
             ) : null}
             {isAuthUser ? (

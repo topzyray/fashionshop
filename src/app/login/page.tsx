@@ -1,14 +1,11 @@
 "use client";
 
 import InputComponent from "@/components/FormElements/InputComponent";
-import {
-  GlobalContext,
-  GlobalStateContextType,
-} from "@/context/global-context";
+import { GlobalContext } from "@/context/global-context";
 import { loginUser } from "@/services/login";
 import { loginFormControls } from "@/utils";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Cookies from "js-cookie";
 
 type InitialFormDataType = {
@@ -25,8 +22,7 @@ export default function Login() {
   const router = useRouter();
   const [formData, setFormData] =
     useState<InitialFormDataType>(initialFormData);
-  const { isAuthUser, setIsAuthUser, user, setUser } =
-    useContext<GlobalStateContextType>(GlobalContext);
+  const { setIsAuthUser, setUser } = useContext(GlobalContext);
 
   const validateFormInput = () => {
     return formData &&
@@ -39,23 +35,24 @@ export default function Login() {
   };
 
   const handleFormSubmit = async () => {
-    const data = await loginUser(formData);
-    if (data.success) {
+    const response = await loginUser(formData);
+    if (response.success) {
       setIsAuthUser(true);
-      setUser(data?.data?.user);
+      setUser(response?.data?.user);
       setFormData(initialFormData);
-      Cookies.set("token", data?.data?.token);
-      localStorage.setItem("user", JSON.stringify(data?.data?.user));
+      Cookies.set("token", response?.data?.token);
+      localStorage.setItem("user", JSON.stringify(response?.data?.user));
+      router.push("/");
     } else {
       setIsAuthUser(false);
     }
   };
 
-  useEffect(() => {
-    if (isAuthUser) {
-      router.push("/");
-    }
-  }, [isAuthUser]);
+  // useEffect(() => {
+  //   if (isAuthUser) {
+  //     router.push("/");
+  //   }
+  // }, [isAuthUser]);
 
   return (
     <section className="bg-white relative h-screen">
