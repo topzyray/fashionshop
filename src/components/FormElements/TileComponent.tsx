@@ -5,8 +5,8 @@ type DataItemType = {
 
 type TileComponentProps = {
   data: DataItemType[];
-  selected: [];
-  onClick: () => void;
+  selected: { id: string; label: string }[];
+  onClick: (getCurrentItem: { id: string; label: string }) => void;
 };
 
 export default function TileComponent({
@@ -15,11 +15,33 @@ export default function TileComponent({
   onClick,
 }: TileComponentProps) {
   return data && data.length ? (
-    <div className="mt-3 flex flex-wrap items-center gap-1">
-      {data.map(({ id, label }: DataItemType) => (
-        <label key={id} className="cursor-pointer">
-          <span className="rounded-lg border border-black px-6 py-2 font-bold">
-            {label}
+    <div className="mt-3 flex flex-wrap items-center gap-1 gap-y-4 sm:gap-y-0">
+      {data.map((dataItem: DataItemType) => (
+        <label
+          onClick={() => onClick(dataItem)}
+          key={dataItem.id}
+          className={`cursor-pointer ${
+            selected &&
+            selected.length &&
+            selected
+              .map((item: { id: string }) => item.id)
+              .indexOf(dataItem.id) !== -1
+              ? "bg-black text-white"
+              : ""
+          }`}
+        >
+          <span
+            className={`rounded-lg border border-gray-300 px-6 py-2 font-bold ${
+              selected &&
+              selected.length &&
+              selected
+                .map((item: { id: string }) => item.id)
+                .indexOf(dataItem.id) !== -1
+                ? "bg-black text-white"
+                : ""
+            }`}
+          >
+            {dataItem.label}
           </span>
         </label>
       ))}

@@ -14,10 +14,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 type NavItemsProps = {
-  isModalView: boolean;
+  isModalView?: boolean;
   isAdminView: boolean;
   router: AppRouterInstance;
   pathName: string;
+  setShowNavModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function NavItems({
@@ -25,6 +26,7 @@ function NavItems({
   isAdminView,
   router,
   pathName,
+  setShowNavModal,
 }: NavItemsProps) {
   return (
     <div
@@ -41,7 +43,10 @@ function NavItems({
         {isAdminView
           ? adminNavOptions.map(({ id, label, path }: NavOptionsType) => (
               <li
-                onClick={() => router.push(`${path}`)}
+                onClick={() => {
+                  setShowNavModal(false);
+                  router.push(`${path}`);
+                }}
                 key={id}
                 className={`cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 hover:underline transition-all ease-in-out duration-500 ${
                   pathName === path ? "font-semibold" : "underline-none"
@@ -52,7 +57,10 @@ function NavItems({
             ))
           : clientNavOptions.map(({ id, label, path }: NavOptionsType) => (
               <li
-                onClick={() => router.push(`${path}`)}
+                onClick={() => {
+                  setShowNavModal(false);
+                  router.push(`${path}`);
+                }}
                 key={id}
                 className={`cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 hover:underline transition-all ease-in-out duration-500 ${
                   pathName === path ? "font-semibold" : "underline-none"
@@ -157,6 +165,7 @@ export default function Navbar() {
             isAdminView={isAdminView}
             router={router}
             pathName={pathName}
+            setShowNavModal={setShowNavModal}
           />
         </div>
       </nav>
@@ -169,6 +178,7 @@ export default function Navbar() {
             isAdminView={isAdminView}
             router={router}
             pathName={pathName}
+            setShowNavModal={setShowNavModal}
           />
         }
         show={showNavModal}
