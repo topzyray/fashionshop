@@ -10,13 +10,22 @@ import {
 import CommonModal from "./CommonModal";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-// const isAdminView = false;
+type NavItemsProps = {
+  isModalView: boolean;
+  isAdminView: boolean;
+  router: AppRouterInstance;
+  pathName: string;
+};
 
-function NavItems({ isModalView = false }) {
-  const { isAdminView } = useContext(GlobalContext);
-
+function NavItems({
+  isModalView = false,
+  isAdminView,
+  router,
+  pathName,
+}: NavItemsProps) {
   return (
     <div
       className={`items-center justify-between w-full md:flex md:w-auto ${
@@ -32,16 +41,22 @@ function NavItems({ isModalView = false }) {
         {isAdminView
           ? adminNavOptions.map(({ id, label, path }: NavOptionsType) => (
               <li
+                onClick={() => router.push(`${path}`)}
                 key={id}
-                className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 hover:underline transition-all ease-in-out duration-500"
+                className={`cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 hover:underline transition-all ease-in-out duration-500 ${
+                  pathName === path ? "font-semibold" : "underline-none"
+                }`}
               >
                 {label}
               </li>
             ))
           : clientNavOptions.map(({ id, label, path }: NavOptionsType) => (
               <li
+                onClick={() => router.push(`${path}`)}
                 key={id}
-                className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 hover:underline transition-all ease-in-out duration-500"
+                className={`cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 hover:underline transition-all ease-in-out duration-500 ${
+                  pathName === path ? "font-semibold" : "underline-none"
+                }`}
               >
                 {label}
               </li>
@@ -52,6 +67,7 @@ function NavItems({ isModalView = false }) {
 }
 
 export default function Navbar() {
+  const pathName = usePathname();
   const router = useRouter();
   const {
     showNavModal,
@@ -60,8 +76,6 @@ export default function Navbar() {
     setIsAuthUser,
     user,
     setUser,
-    isAdminView,
-    setIsAdminView,
   } = useContext(GlobalContext);
 
   const handleLogout = () => {
@@ -72,11 +86,16 @@ export default function Navbar() {
     router.push("/");
   };
 
+  const isAdminView = pathName.includes("/admin");
+
   return (
     <>
       <nav className="bg-white w-full fixed z-20 top-0 left-0 border-b border-gray-200">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <div className="flex items-center cursor-pointer">
+          <div
+            onClick={() => router.push("/")}
+            className="flex items-center cursor-pointer"
+          >
             <span className="self-center text-2xl font-semibold whitespace-nowrap">
               <span className="bg-black text-white">Fashion</span>Shop
             </span>
@@ -90,15 +109,12 @@ export default function Navbar() {
             ) : null}
             {user?.role === "admin" && isAuthUser ? (
               isAdminView ? (
-                <button
-                  onClick={() => setIsAdminView(false)}
-                  className="btn-small"
-                >
+                <button onClick={() => router.push("/")} className="btn-small">
                   Client View
                 </button>
               ) : (
                 <button
-                  onClick={() => setIsAdminView(true)}
+                  onClick={() => router.push("/admin")}
                   className="btn-small"
                 >
                   Admin View
@@ -137,13 +153,24 @@ export default function Navbar() {
             </div>
           </div>
 
-          <NavItems />
+          <NavItems
+            isAdminView={isAdminView}
+            router={router}
+            pathName={pathName}
+          />
         </div>
       </nav>
 
       <CommonModal
         showModelTitle={false}
-        mainContent={<NavItems isModalView={true} />}
+        mainContent={
+          <NavItems
+            isModalView={true}
+            isAdminView={isAdminView}
+            router={router}
+            pathName={pathName}
+          />
+        }
         show={showNavModal}
         setShow={setShowNavModal}
       />

@@ -17,8 +17,8 @@ type GlobalContextType = {
   setIsAuthUser: React.Dispatch<React.SetStateAction<boolean>>;
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  isAdminView: boolean;
-  setIsAdminView: React.Dispatch<React.SetStateAction<boolean>>;
+  // isAdminView: boolean;
+  // setIsAdminView: React.Dispatch<React.SetStateAction<boolean>>;
   pageLevelLoader: boolean;
   setPageLevelLoader: React.Dispatch<React.SetStateAction<boolean>>;
   componentLevelLoader: {
@@ -48,7 +48,7 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
   });
   const [isAuthUser, setIsAuthUser] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
-  const [isAdminView, setIsAdminView] = useState<boolean>(false);
+  // const [isAdminView, setIsAdminView] = useState<boolean>(false);
 
   useEffect(() => {
     if (Cookies.get("token") !== undefined) {
@@ -64,16 +64,6 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
     }
   }, [Cookies]);
 
-  // useEffect(() => {
-  //   if (Cookies.get("token") !== undefined) {
-  //     setIsAuthUser(true);
-  //     const userData = localStorage.getItem("user") || {};
-  //     setUser(userData);
-  //   } else {
-  //     setIsAuthUser(false);
-  //   }
-  // }, [Cookies]);
-
   return (
     <GlobalContext.Provider
       value={{
@@ -83,8 +73,6 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
         setIsAuthUser,
         user,
         setUser,
-        isAdminView,
-        setIsAdminView,
         pageLevelLoader,
         setPageLevelLoader,
         componentLevelLoader,
