@@ -29,3 +29,19 @@ export const addNewProduct = async (formData: AddNewProductType) => {
     console.log("Error", err);
   }
 };
+
+export const getAllProducts = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/admin/all-products",
+      {
+        cache: "no-store",
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.log("Error", err);
+  }
+};

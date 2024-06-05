@@ -180,7 +180,9 @@ export default function AdminAddNewProduc() {
           </label>
 
           <div className="flex gap-2 flex-col">
-            <label>Choose Available sizes</label>
+            <label>
+              Choose Available sizes {formData.imageUrl ? "Yes" : "No"}
+            </label>
             <TileComponent
               onClick={handleTileClick}
               data={availableSizes}
