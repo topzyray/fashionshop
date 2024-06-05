@@ -133,6 +133,10 @@ export const adminAddProductFormControls = [
     componentType: "select",
     options: [
       {
+        id: "",
+        label: "Select",
+      },
+      {
         id: "men",
         label: "Men",
       },
@@ -160,6 +164,10 @@ export const adminAddProductFormControls = [
     label: "On Sale",
     componentType: "select",
     options: [
+      {
+        id: "",
+        label: "Select",
+      },
       {
         id: "yes",
         label: "Yes",

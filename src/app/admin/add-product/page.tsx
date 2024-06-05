@@ -6,7 +6,7 @@ import TileComponent from "@/components/FormElements/TileComponent";
 import ComponentLevelLoader from "@/components/Loaders/ComponentLevelLoader";
 import { GlobalContext } from "@/context/global-context";
 import { adminAddProductFormControls, availableSizes } from "@/utils";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IoIosImages } from "react-icons/io";
 import { app, firebaseStorageUrl } from "@/firebase/index";
 import {
@@ -15,6 +15,10 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import { addNewProduct } from "@/services/product";
+import { toast, ToastPosition } from "react-toastify";
+import Notification from "@/components/Notification";
+import { useRouter } from "next/navigation";
 
 interface File {
   name: string;
@@ -24,6 +28,18 @@ interface File {
   lastModifiedDate: Date;
   webkitRelativePath: string;
 }
+
+// type InitialFormDataType = {
+//   name: string;
+//   description: string;
+//   price: number;
+//   category: string;
+//   sizes: { id: string; label: string }[] | [];
+//   deliveryInfo: string;
+//   onSale: string;
+//   priceDrop: number;
+//   imageUrl: string;
+// };
 
 const createUniqueFileName = (getFile: File) => {
   const timestamp = Date.now();
@@ -69,8 +85,9 @@ const initialFormData = {
 };
 
 export default function AdminAddNewProduc() {
+  const router = useRouter();
   const [formData, setFormData] = useState(initialFormData);
-  const { componentLevelLoader, setComponentLevelLoader } =
+  const { isAuthUser, user, componentLevelLoader, setComponentLevelLoader } =
     useContext(GlobalContext);
 
   const [fileName, setFileName] = useState("");
@@ -112,10 +129,37 @@ export default function AdminAddNewProduc() {
     });
   };
 
-  console.log(formData);
+  const handleAddNewProduct = async () => {
+    setComponentLevelLoader({ loading: true, id: "" });
+    const response = await addNewProduct(formData);
+    if (response.success) {
+      toast.success(response.message, {
+        position: "top-right" as ToastPosition,
+      });
+      setComponentLevelLoader({ loading: false, id: "" });
+      setFormData(initialFormData);
+      setTimeout(() => {
+        router.push("/admin/all-products");
+      }, 1500);
+    } else {
+      toast.error(response.message, {
+        position: "top-right" as ToastPosition,
+      });
+      setComponentLevelLoader({ loading: false, id: "" });
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthUser && user?.role !== "admin") {
+      router.push("/");
+    }
+    if (!isAuthUser) {
+      router.push("/login");
+    }
+  }, [user, isAuthUser]);
 
   return (
-    <div className="w-full mt-5 mr-0 mb-5 ml-0 px-5 relative">
+    <section className="w-full mt-5 mr-0 mb-5 ml-0 px-5 relative">
       <div className="max-w-4xl flex flex-col items-center justify-start mx-auto p-5 sm:p-10 bg-white shadow-2xl rounded-xl relative">
         <p className="w-full text-2xl md:text-4xl font-medium text-center font-serif">
           Add New Product
@@ -123,7 +167,9 @@ export default function AdminAddNewProduc() {
         <div className="w-full mt-6 mr-0 mb-0 ml-0 space-y-8">
           <label className="inline-flex gap-1 items-center cursor-pointer hover:shadow transition-all ease-in-out duration-300">
             <IoIosImages className="text-4xl" />
-            <span className="">{fileName ? fileName : "Choose File"}</span>
+            <span className="">
+              {fileName ? fileName : "Add product image"}
+            </span>
             <input
               type="file"
               accept="image/*"
@@ -173,7 +219,7 @@ export default function AdminAddNewProduc() {
                 />
               ) : null
           )}
-          <button className="btn-large">
+          <button onClick={handleAddNewProduct} className="btn-large">
             {componentLevelLoader && componentLevelLoader.loading ? (
               <ComponentLevelLoader
                 text="Adding Product"
@@ -186,6 +232,7 @@ export default function AdminAddNewProduc() {
           </button>
         </div>
       </div>
-    </div>
+      <Notification />
+    </section>
   );
 }
