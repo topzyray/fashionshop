@@ -15,7 +15,7 @@ export const registerNewUser = async (formData: RegisterNewUserType) => {
       body: JSON.stringify(formData),
     });
 
-    const data = response.json();
+    const data = await response.json();
     return data;
   } catch (err) {
     console.log("Error", err);
