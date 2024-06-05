@@ -48,7 +48,7 @@ function NavItems({
                   router.push(`${path}`);
                 }}
                 key={id}
-                className={`cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 hover:underline transition-all ease-in-out duration-500 ${
+                className={`cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 hover:underline transition-all ease-in-out duration-300 ${
                   pathName === path ? "font-semibold" : "underline-none"
                 }`}
               >
@@ -62,7 +62,7 @@ function NavItems({
                   router.push(`${path}`);
                 }}
                 key={id}
-                className={`cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 hover:underline transition-all ease-in-out duration-500 ${
+                className={`cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 hover:underline transition-all ease-in-out duration-300 ${
                   pathName === path ? "font-semibold" : "underline-none"
                 }`}
               >
