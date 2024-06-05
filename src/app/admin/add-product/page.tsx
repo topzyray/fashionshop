@@ -96,7 +96,6 @@ export default function AdminAddNewProduc() {
     const extractImageUrl = await helperForUploadingImageToFirebase(
       e.target.files[0]
     );
-    console.log(extractImageUrl);
     if (
       extractImageUrl !== "" ||
       extractImageUrl !== undefined ||

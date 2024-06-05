@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-type AddNewProductType = {
+type ProductType = {
   name: string;
   description: string;
   price: number;
@@ -12,7 +12,7 @@ type AddNewProductType = {
   imageUrl: string;
 };
 
-export const addNewProduct = async (formData: AddNewProductType) => {
+export const addNewProduct = async (formData: ProductType) => {
   try {
     const response = await fetch("/api/admin/add-product", {
       method: "POST",
@@ -38,6 +38,40 @@ export const getAllProducts = async () => {
         cache: "no-store",
       }
     );
+
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.log("Error", err);
+  }
+};
+
+export const updateProduct = async (formData: ProductType) => {
+  try {
+    const response = await fetch("/api/admin/update-product", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.log("Error", err);
+  }
+};
+
+export const deleteProduct = async (id: string) => {
+  try {
+    const response = await fetch(`/api/admin/delete-product?id=${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      },
+    });
 
     const data = await response.json();
     return data;
