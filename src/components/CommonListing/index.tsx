@@ -1,5 +1,8 @@
+import { useRouter } from "next/navigation";
+import Notification from "../Notification";
 import ProductCard from "./ProductCard";
 import ProductCardButton from "./ProductCardButton";
+import { useEffect } from "react";
 
 export type SizesType = {
   id: string;
@@ -24,6 +27,12 @@ export default function CommonListingGrid({
 }: {
   data: ProductDetailsProps[];
 }) {
+  // const router = useRouter();
+
+  // useEffect(() => {
+  //   router.refresh();
+  // }, []);
+
   return (
     <section className="bg-white py-12 sm:py-16">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -41,6 +50,7 @@ export default function CommonListingGrid({
             : null}
         </div>
       </div>
+      <Notification />
     </section>
   );
 }
