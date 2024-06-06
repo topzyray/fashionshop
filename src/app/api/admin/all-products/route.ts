@@ -5,28 +5,20 @@ import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 export async function GET(_request: NextRequest) {
-  await connectToDB();
   try {
-    const user = "admin";
-    if (user === "admin") {
-      const allProducts = await Product.find({});
-      if (allProducts) {
-        return NextResponse.json({
-          success: true,
-          productsCount: allProducts.length,
-          data: allProducts,
-        });
-      } else {
-        return NextResponse.json({
-          success: false,
-          status: 204,
-          message: "No products found.",
-        });
-      }
+    await connectToDB();
+    const allProducts = await Product.find({});
+    if (allProducts) {
+      return NextResponse.json({
+        success: true,
+        productsCount: allProducts.length,
+        data: allProducts,
+      });
     } else {
       return NextResponse.json({
         success: false,
-        message: "You are not authorized!",
+        status: 204,
+        message: "No products found.",
       });
     }
   } catch (err) {

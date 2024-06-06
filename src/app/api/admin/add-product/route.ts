@@ -62,11 +62,13 @@ export async function POST(request: NextRequest) {
       if (newlyCreatedProduct) {
         return NextResponse.json({
           success: true,
+          status: 201,
           message: "New product added successfully",
         });
       } else {
         return NextResponse.json({
           success: false,
+          status: 404,
           message: "Failed to add new product, please try again!",
         });
       }
@@ -80,6 +82,7 @@ export async function POST(request: NextRequest) {
     console.log("Error in adding new product", err);
     return NextResponse.json({
       success: false,
+      status: 500,
       message: "Something went wrong. Please try again",
     });
   }

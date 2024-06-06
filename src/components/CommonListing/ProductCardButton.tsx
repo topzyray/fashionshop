@@ -69,6 +69,6 @@ export default function ProductCardButton({
       </button>
     </div>
   ) : (
-    <button className="btn-large">Add to Cart</button>
+    <button className="btn-small">Add to Cart</button>
   );
 }

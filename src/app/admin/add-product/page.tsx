@@ -20,6 +20,8 @@ import { toast, ToastPosition } from "react-toastify";
 import Notification from "@/components/Notification";
 import { useRouter } from "next/navigation";
 import { ProductDetailsProps } from "@/components/CommonListing";
+import { IoMdCheckmark } from "react-icons/io";
+import { HiOutlineArrowPathRoundedSquare } from "react-icons/hi2";
 
 interface File {
   name: string;
@@ -174,8 +176,17 @@ export default function AdminAddNewProduc() {
         <div className="w-full mt-6 mr-0 mb-0 ml-0 space-y-8">
           <label className="inline-flex gap-1 items-center cursor-pointer hover:shadow transition-all ease-in-out duration-300">
             <IoIosImages className="text-4xl" />
-            <span className="">
-              {fileName ? fileName : "Add product image"}
+            <span className="flex items-center gap-2">
+              {fileName ? fileName : "Add product image"}{" "}
+              {formData.imageUrl ? (
+                <IoMdCheckmark color="green" size={25} />
+              ) : (
+                <HiOutlineArrowPathRoundedSquare
+                  color="gray"
+                  size={25}
+                  className="animate-pulse"
+                />
+              )}
             </span>
             <input
               type="file"
@@ -187,9 +198,7 @@ export default function AdminAddNewProduc() {
           </label>
 
           <div className="flex gap-2 flex-col">
-            <label>
-              Choose Available sizes {formData.imageUrl ? "Yes" : "No"}
-            </label>
+            <label>Choose Available sizes</label>
             <TileComponent
               onClick={handleTileClick}
               data={availableSizes}

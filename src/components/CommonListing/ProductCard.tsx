@@ -22,7 +22,9 @@ export default function ProductCard({ item }: { item: ProductDetailsProps }) {
         ) : null}
         <div className="my-4 mx-auto flex w-10/12 flex-col items-start justify-between">
           <div className="mb-2 flex">
-            <p className="mr-3 text-sm font-semibold">{`N ${item.price}`}</p>
+            <p className="mr-3 text-sm font-semibold">{`
+              ₦
+            ${item.price}`}</p>
           </div>
           <h3 className="mb-2 text-gray-400 text-sm">{item.name}</h3>
         </div>

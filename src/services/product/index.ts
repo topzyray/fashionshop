@@ -68,3 +68,20 @@ export const deleteProduct = async (id: string) => {
     console.log("Error", err);
   }
 };
+
+export const getProductByCategory = async (category: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/admin/product-by-category?category=${category}`,
+      {
+        method: "GET",
+        cache: "no-store",
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.log("Error", err);
+  }
+};
