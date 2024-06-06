@@ -15,10 +15,11 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { addNewProduct } from "@/services/product";
+import { addNewProduct, updateProduct } from "@/services/product";
 import { toast, ToastPosition } from "react-toastify";
 import Notification from "@/components/Notification";
 import { useRouter } from "next/navigation";
+import { ProductDetailsProps } from "@/components/CommonListing";
 
 interface File {
   name: string;
@@ -28,18 +29,6 @@ interface File {
   lastModifiedDate: Date;
   webkitRelativePath: string;
 }
-
-// type InitialFormDataType = {
-//   name: string;
-//   description: string;
-//   price: number;
-//   category: string;
-//   sizes: { id: string; label: string }[] | [];
-//   deliveryInfo: string;
-//   onSale: string;
-//   priceDrop: number;
-//   imageUrl: string;
-// };
 
 const createUniqueFileName = (getFile: File) => {
   const timestamp = Date.now();
@@ -77,7 +66,6 @@ const initialFormData = {
   price: 0,
   category: "",
   sizes: [],
-  // sizes: [] as { id: string; label: string }[],
   deliveryInfo: "",
   onSale: "",
   priceDrop: 0,
@@ -86,11 +74,19 @@ const initialFormData = {
 
 export default function AdminAddNewProduc() {
   const router = useRouter();
-  const [formData, setFormData] = useState(initialFormData);
-  const { isAuthUser, user, componentLevelLoader, setComponentLevelLoader } =
-    useContext(GlobalContext);
+  const {
+    isAuthUser,
+    user,
+    componentLevelLoader,
+    setComponentLevelLoader,
+    currentUpdatedProduct,
+    setCurrentUpdatedProduct,
+  } = useContext(GlobalContext);
 
+  const [formData, setFormData] =
+    useState<ProductDetailsProps>(initialFormData);
   const [fileName, setFileName] = useState("");
+
   const handleImageUpload = async (e) => {
     setFileName(e.target.files[0].name);
     const extractImageUrl = await helperForUploadingImageToFirebase(
@@ -130,13 +126,17 @@ export default function AdminAddNewProduc() {
 
   const handleAddNewProduct = async () => {
     setComponentLevelLoader({ loading: true, id: "" });
-    const response = await addNewProduct(formData);
+    const response =
+      currentUpdatedProduct !== null
+        ? await updateProduct(formData)
+        : await addNewProduct(formData);
     if (response.success) {
       toast.success(response.message, {
         position: "top-right" as ToastPosition,
       });
       setComponentLevelLoader({ loading: false, id: "" });
       setFormData(initialFormData);
+      setCurrentUpdatedProduct(null);
       setTimeout(() => {
         router.push("/admin/all-products");
       }, 1500);
@@ -147,6 +147,12 @@ export default function AdminAddNewProduc() {
       setComponentLevelLoader({ loading: false, id: "" });
     }
   };
+
+  useEffect(() => {
+    if (currentUpdatedProduct !== null) {
+      setFormData(currentUpdatedProduct);
+    }
+  }, [currentUpdatedProduct]);
 
   useEffect(() => {
     if (isAuthUser && user?.role !== "admin") {
@@ -161,7 +167,9 @@ export default function AdminAddNewProduc() {
     <section className="w-full mt-5 mr-0 mb-5 ml-0 px-5 relative">
       <div className="max-w-4xl flex flex-col items-center justify-start mx-auto p-5 sm:p-10 bg-white shadow-2xl rounded-xl relative">
         <p className="w-full text-2xl md:text-4xl font-medium text-center font-serif">
-          Add New Product
+          {currentUpdatedProduct && currentUpdatedProduct !== null
+            ? "Update Product Page"
+            : "Add New Product"}
         </p>
         <div className="w-full mt-6 mr-0 mb-0 ml-0 space-y-8">
           <label className="inline-flex gap-1 items-center cursor-pointer hover:shadow transition-all ease-in-out duration-300">
@@ -223,10 +231,16 @@ export default function AdminAddNewProduc() {
           <button onClick={handleAddNewProduct} className="btn-large">
             {componentLevelLoader && componentLevelLoader.loading ? (
               <ComponentLevelLoader
-                text="Adding Product"
+                text={
+                  currentUpdatedProduct && currentUpdatedProduct !== null
+                    ? "Updating Product"
+                    : "Adding Product"
+                }
                 color="#ffffff"
                 loading={componentLevelLoader && componentLevelLoader.loading}
               />
+            ) : currentUpdatedProduct && currentUpdatedProduct !== null ? (
+              "Update Product"
             ) : (
               "Add Product"
             )}

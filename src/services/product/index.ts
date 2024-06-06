@@ -1,18 +1,7 @@
+import { ProductDetailsProps } from "@/components/CommonListing";
 import Cookies from "js-cookie";
 
-type ProductType = {
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  sizes: string;
-  deliveryInfo: string;
-  onSale: string;
-  priceDrop: number;
-  imageUrl: string;
-};
-
-export const addNewProduct = async (formData: ProductType) => {
+export const addNewProduct = async (formData: ProductDetailsProps) => {
   try {
     const response = await fetch("/api/admin/add-product", {
       method: "POST",
@@ -46,7 +35,7 @@ export const getAllProducts = async () => {
   }
 };
 
-export const updateProduct = async (formData: ProductType) => {
+export const updateProduct = async (formData: ProductDetailsProps) => {
   try {
     const response = await fetch("/api/admin/update-product", {
       method: "PUT",

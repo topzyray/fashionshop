@@ -1,8 +1,10 @@
+import { SizesType } from "../CommonListing";
+
 type InputComponentProps = {
   label: string;
   placeholder: string;
   type?: string;
-  value: string | number | readonly string[] | undefined;
+  value: string | number | SizesType[] | [] | undefined;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 

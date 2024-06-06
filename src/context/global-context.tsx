@@ -2,6 +2,7 @@
 
 import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { ProductDetailsProps } from "@/components/CommonListing";
 
 export type User = {
   _id: string;
@@ -17,8 +18,6 @@ type GlobalContextType = {
   setIsAuthUser: React.Dispatch<React.SetStateAction<boolean>>;
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  // isAdminView: boolean;
-  // setIsAdminView: React.Dispatch<React.SetStateAction<boolean>>;
   pageLevelLoader: boolean;
   setPageLevelLoader: React.Dispatch<React.SetStateAction<boolean>>;
   componentLevelLoader: {
@@ -30,6 +29,10 @@ type GlobalContextType = {
       loading: boolean;
       id: string;
     }>
+  >;
+  currentUpdatedProduct: ProductDetailsProps | null;
+  setCurrentUpdatedProduct: React.Dispatch<
+    React.SetStateAction<ProductDetailsProps | null>
   >;
 };
 
@@ -48,7 +51,8 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
   });
   const [isAuthUser, setIsAuthUser] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
-  // const [isAdminView, setIsAdminView] = useState<boolean>(false);
+  const [currentUpdatedProduct, setCurrentUpdatedProduct] =
+    useState<ProductDetailsProps | null>(null);
 
   useEffect(() => {
     if (Cookies.get("token") !== undefined) {
@@ -77,6 +81,8 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
         setPageLevelLoader,
         componentLevelLoader,
         setComponentLevelLoader,
+        currentUpdatedProduct,
+        setCurrentUpdatedProduct,
       }}
     >
       {children}

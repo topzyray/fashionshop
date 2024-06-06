@@ -7,12 +7,12 @@ export type SizesType = {
 };
 
 export type ProductDetailsProps = {
-  _id: string;
+  _id?: string;
   name: string;
   description: string;
   price: number;
   category: string;
-  sizes: SizesType[];
+  sizes: SizesType[] | [];
   deliveryInfo: string;
   onSale: string;
   priceDrop: number;

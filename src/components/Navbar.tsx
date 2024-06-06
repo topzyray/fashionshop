@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import { GlobalContext } from "@/context/global-context";
 import {
   adminNavOptions,
@@ -84,7 +84,15 @@ export default function Navbar() {
     setIsAuthUser,
     user,
     setUser,
+    currentUpdatedProduct,
+    setCurrentUpdatedProduct,
   } = useContext(GlobalContext);
+
+  useEffect(() => {
+    if (pathName !== "/admin/add-product" && currentUpdatedProduct !== null) {
+      setCurrentUpdatedProduct(null);
+    }
+  }, [pathName]);
 
   const handleLogout = () => {
     setIsAuthUser(false);
