@@ -1,6 +1,8 @@
 import connectToDB from "@/database";
+import AuthenticateUser from "@/middleware/Authenticate";
 import Product from "@/models/product";
 import { NextRequest, NextResponse } from "next/server";
+import { IsAuthUserType } from "../add-product/route";
 
 export const dynamic = "force-dynamic";
 
@@ -8,9 +10,16 @@ export async function PUT(request: NextRequest) {
   try {
     await connectToDB();
 
-    const user = "admin";
+    const isAuthUser: IsAuthUserType = await AuthenticateUser(request);
 
-    if (user === "admin") {
+    if (!isAuthUser) {
+      return NextResponse.json({
+        success: false,
+        message: "Unauthorized.",
+      });
+    }
+
+    if (isAuthUser.role === "admin") {
       const extractData = await request.json();
       const {
         _id,

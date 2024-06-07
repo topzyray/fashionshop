@@ -1,7 +1,14 @@
 import connectToDB from "@/database";
+import AuthenticateUser from "@/middleware/Authenticate";
 import Product from "@/models/product";
 import Joi from "joi";
+import { Jwt, JwtPayload } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
+
+export type IsAuthUserType =
+  | (Jwt & JwtPayload & { role?: string })
+  | false
+  | undefined;
 
 const AddNewProductSchema = Joi.object({
   name: Joi.string().required(),
@@ -22,9 +29,16 @@ export async function POST(request: NextRequest) {
     // Connect to database
     await connectToDB();
 
-    const user = "admin";
+    const isAuthUser: IsAuthUserType = await AuthenticateUser(request);
 
-    if (user === "admin") {
+    if (!isAuthUser) {
+      return NextResponse.json({
+        success: false,
+        message: "Unauthorized.",
+      });
+    }
+
+    if (isAuthUser?.role === "admin") {
       const extractData = await request.json();
       const {
         name,
