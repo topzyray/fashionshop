@@ -22,9 +22,9 @@ export async function GET(request: NextRequest) {
         });
       }
 
-      const extractAllCartItems = await Cart.find({ userID: id })
-        .populate("userID")
-        .populate("productID");
+      const extractAllCartItems = await Cart.find({ userId: id }).populate(
+        "productId"
+      );
 
       if (extractAllCartItems) {
         return NextResponse.json({

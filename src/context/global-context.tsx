@@ -34,6 +34,12 @@ type GlobalContextType = {
   setCurrentUpdatedProduct: React.Dispatch<
     React.SetStateAction<ProductDetailsProps | null>
   >;
+  showCartModal: boolean;
+  setShowCartModal: React.Dispatch<React.SetStateAction<boolean>>;
+  cartItems: ProductDetailsProps[] | [];
+  setCartItems: React.Dispatch<
+    React.SetStateAction<ProductDetailsProps[] | []>
+  >;
 };
 
 type GlobalContextProviderProps = {
@@ -53,6 +59,8 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [currentUpdatedProduct, setCurrentUpdatedProduct] =
     useState<ProductDetailsProps | null>(null);
+  const [showCartModal, setShowCartModal] = useState<boolean>(false);
+  const [cartItems, setCartItems] = useState<ProductDetailsProps[] | []>([]);
 
   useEffect(() => {
     if (Cookies.get("token") !== undefined) {
@@ -83,6 +91,10 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
         setComponentLevelLoader,
         currentUpdatedProduct,
         setCurrentUpdatedProduct,
+        showCartModal,
+        setShowCartModal,
+        cartItems,
+        setCartItems,
       }}
     >
       {children}

@@ -12,6 +12,7 @@ import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import CartModal from "./CartModal";
 
 type NavItemsProps = {
   isModalView?: boolean;
@@ -86,6 +87,8 @@ export default function Navbar() {
     setUser,
     currentUpdatedProduct,
     setCurrentUpdatedProduct,
+    showCartModal,
+    setShowCartModal,
   } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -100,6 +103,8 @@ export default function Navbar() {
     Cookies.remove("token");
     localStorage.clear();
     router.push("/");
+    setShowNavModal(!showNavModal);
+    setShowCartModal(!showCartModal);
   };
 
   const isAdminView = pathName.includes("/admin");
@@ -192,6 +197,8 @@ export default function Navbar() {
         show={showNavModal}
         setShow={setShowNavModal}
       />
+
+      {showCartModal && <CartModal />}
     </>
   );
 }

@@ -11,7 +11,7 @@ import { Fragment } from "react";
 
 type CommonModalProps = {
   modalTitle?: string;
-  mainContent?: React.ReactElement<any>;
+  mainContent?: React.ReactNode;
   showButtons?: boolean;
   buttonComponent?: React.ReactNode;
   show: boolean;

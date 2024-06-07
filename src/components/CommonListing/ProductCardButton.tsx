@@ -6,8 +6,10 @@ import { GlobalContext } from "@/context/global-context";
 import { deleteProduct } from "@/services/product";
 import { toast, ToastPosition } from "react-toastify";
 import ComponentLevelLoader from "../Loaders/ComponentLevelLoader";
+import { addCartItem } from "@/services/cart";
 
 type ProductDeleteType = Required<ProductDetailsProps>;
+type AddCardType = Required<ProductDetailsProps>;
 
 export default function ProductCardButton({
   item,
@@ -20,6 +22,8 @@ export default function ProductCardButton({
     setCurrentUpdatedProduct,
     componentLevelLoader,
     setComponentLevelLoader,
+    user,
+    setShowCartModal,
   } = useContext(GlobalContext);
   const isAdminView = pathName.includes("/admin");
 
@@ -30,13 +34,44 @@ export default function ProductCardButton({
       toast.success(response.message, {
         position: "top-right" as ToastPosition,
       });
-      setComponentLevelLoader({ loading: false, id: item._id });
+      setComponentLevelLoader({ loading: false, id: "" });
       router.refresh();
     } else {
       toast.error(response.message, {
         position: "top-right" as ToastPosition,
       });
-      setComponentLevelLoader({ loading: false, id: item._id });
+      setComponentLevelLoader({ loading: false, id: "" });
+    }
+  };
+
+  const handleAddToCart = async (item: AddCardType) => {
+    setComponentLevelLoader({ loading: true, id: item._id });
+    if (user !== null) {
+      const response = await addCartItem({
+        productId: item._id,
+        userId: user._id,
+      });
+      if (response.success) {
+        toast.success(response.message, {
+          position: "top-right" as ToastPosition,
+        });
+        setComponentLevelLoader({ loading: false, id: "" });
+        setShowCartModal(true);
+      } else {
+        toast.error(response.message, {
+          position: "top-right" as ToastPosition,
+        });
+        setComponentLevelLoader({ loading: false, id: "" });
+        setShowCartModal(true);
+      }
+    } else {
+      toast.error("Please login to add to cart", {
+        position: "top-right" as ToastPosition,
+      });
+      setComponentLevelLoader({ loading: false, id: "" });
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
     }
   };
 
@@ -69,6 +104,21 @@ export default function ProductCardButton({
       </button>
     </div>
   ) : (
-    <button className="btn-small">Add to Cart</button>
+    <button
+      onClick={() => handleAddToCart(item)}
+      className={`btn-small flex justify-center items-center`}
+    >
+      {componentLevelLoader &&
+      componentLevelLoader.loading &&
+      item._id === componentLevelLoader.id ? (
+        <ComponentLevelLoader
+          text="Adding to Cart"
+          color="#ffffff"
+          loading={componentLevelLoader && componentLevelLoader.loading}
+        />
+      ) : (
+        "Add to Cart"
+      )}
+    </button>
   );
 }

@@ -5,8 +5,8 @@ import Joi from "joi";
 import { NextRequest, NextResponse } from "next/server";
 
 const AddToCartSchema = Joi.object({
-  userID: Joi.string().required(),
-  productID: Joi.string().required(),
+  userId: Joi.string().required(),
+  productId: Joi.string().required(),
 });
 
 export const dynamic = "force-dynamic";
@@ -26,9 +26,9 @@ export async function POST(request: NextRequest) {
         });
       }
 
-      const { userID, productID } = data;
+      const { userId, productId } = data;
 
-      const { error } = AddToCartSchema.validate({ userID, productID });
+      const { error } = AddToCartSchema.validate({ userId, productId });
       if (error) {
         return NextResponse.json({
           success: false,
@@ -38,8 +38,8 @@ export async function POST(request: NextRequest) {
       }
 
       const isCurrentCartAreadyExist = await Cart.findOne({
-        productId: productID,
-        userID: userID,
+        productId: productId,
+        userId: userId,
       });
 
       if (isCurrentCartAreadyExist) {
