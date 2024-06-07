@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
         });
       }
 
-      const isCurrentCartAreadyExist = await Cart.find({
+      const isCurrentCartAreadyExist = await Cart.findOne({
         productId: productID,
         userID: userID,
       });
