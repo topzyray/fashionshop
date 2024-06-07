@@ -22,7 +22,7 @@ export const addNewProduct = async (formData: ProductDetailsProps) => {
 export const getAllProducts = async () => {
   try {
     const response = await fetch(
-      "http://localhost:3000/api/admin/all-products",
+      "http://localhost:3000/api/client/all-products",
       {
         cache: "no-store",
       }
@@ -72,7 +72,24 @@ export const deleteProduct = async (id: string) => {
 export const getProductByCategory = async (category: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/admin/product-by-category?category=${category}`,
+      `http://localhost:3000/api/client/product-by-category?category=${category}`,
+      {
+        method: "GET",
+        cache: "no-store",
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.log("Error", err);
+  }
+};
+
+export const getProductById = async (id: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/client/product-by-id?id=${id}`,
       {
         method: "GET",
         cache: "no-store",

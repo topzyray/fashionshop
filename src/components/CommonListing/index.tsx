@@ -2,6 +2,7 @@ import { useRouter } from "next/navigation";
 import Notification from "../Notification";
 import ProductCard from "./ProductCard";
 import ProductCardButton from "./ProductCardButton";
+import Link from "next/link";
 
 export type SizesType = {
   id: string;
@@ -36,7 +37,9 @@ export default function CommonListingGrid({
                   className="relative flex flex-col overflow-hidden border cursor-pointer hover:shadow-md transition-all ease-in-out duration-300"
                   key={item._id}
                 >
-                  <ProductCard item={item} />
+                  <Link href={`/product/${item._id}`}>
+                    <ProductCard item={item} />
+                  </Link>
                   <ProductCardButton item={item} />
                 </article>
               ))

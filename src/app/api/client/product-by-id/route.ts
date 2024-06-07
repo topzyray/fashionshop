@@ -1,6 +1,5 @@
 import connectToDB from "@/database";
 import Product from "@/models/product";
-import { request } from "http";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -9,28 +8,27 @@ export async function GET(request: NextRequest) {
   try {
     await connectToDB();
     const { searchParams } = new URL(request.url);
-    const category = searchParams.get("category");
-    if (!category) {
+    const id = searchParams.get("id");
+    if (!id) {
       return NextResponse.json({
         success: false,
         status: 400,
-        message: "Category is required.",
+        message: "Product Id is required.",
       });
     }
 
-    const response = await Product.find({ category: category });
-    if (response.length > 0) {
+    const response = await Product.find({ _id: id });
+    if (response && response.length) {
       return NextResponse.json({
         success: true,
         status: 200,
-        productsCount: response.length,
-        data: response,
+        data: response[0],
       });
     } else {
       return NextResponse.json({
         success: false,
         status: 404,
-        message: `No products with the category of ${category}.`,
+        message: `No products with the category of ${id}.`,
       });
     }
   } catch (err) {
