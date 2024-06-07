@@ -168,7 +168,7 @@ export default function AdminAddNewProduc() {
   return (
     <section className="w-full mt-5 mr-0 mb-5 ml-0 px-5 relative">
       <div className="max-w-4xl flex flex-col items-center justify-start mx-auto p-5 sm:p-10 bg-white shadow-2xl rounded-xl relative">
-        <p className="w-full text-2xl md:text-4xl font-medium text-center font-serif">
+        <p className="w-full text-xl md:text-3xl font-medium text-center font-serif">
           {currentUpdatedProduct && currentUpdatedProduct !== null
             ? "Update Product Page"
             : "Add New Product"}

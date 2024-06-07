@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import CommonModal from "../CommonModal";
 import { GlobalContext } from "@/context/global-context";
 import { deleteCartItem, getAllCartItems } from "@/services/cart";
@@ -78,8 +78,8 @@ export default function CartModal() {
                 <div className="ml-4 flex flex-1 flex-col">
                   <div>
                     <div className="flex justify-between text-base font-medium text-gray-900 hover:underline">
-                      <h3>
-                        <Link href="#">
+                      <h3 onClick={() => setShowCartModal(false)}>
+                        <Link href={`/product/${cartItem.productId._id}`}>
                           {cartItem &&
                             cartItem.productId &&
                             cartItem.productId.name}
@@ -127,7 +127,14 @@ export default function CartModal() {
       }
       buttonComponent={
         <div className="flex flex-col w-full">
-          <button type="button" className="btn-small">
+          <button
+            onClick={() => {
+              router.push("/cart");
+              setShowCartModal(false);
+            }}
+            type="button"
+            className="btn-small"
+          >
             Go To Cart
           </button>
           <button
