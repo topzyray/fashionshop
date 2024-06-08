@@ -13,7 +13,7 @@ import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import CartModal from "./CartModal";
-import { ProductDetailsProps } from "./CommonListing";
+import { CartItem } from "./CommonCart";
 
 type NavItemsProps = {
   isModalView?: boolean;
@@ -21,8 +21,9 @@ type NavItemsProps = {
   router: AppRouterInstance;
   pathName: string;
   setShowNavModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowCartModal: React.Dispatch<React.SetStateAction<boolean>>;
   isAuthUser: boolean;
-  cartItems: ProductDetailsProps[] | [];
+  cartItems: CartItem[] | [];
   user: User | null;
   handleLogout: () => void;
 };
@@ -33,6 +34,7 @@ function NavItems({
   router,
   pathName,
   setShowNavModal,
+  setShowCartModal,
   isAuthUser,
   cartItems,
   user,
@@ -89,14 +91,17 @@ function NavItems({
             <button
               onClick={() => {
                 setShowNavModal(false);
+                setShowCartModal(true);
                 router.push("/cart");
               }}
               className="btn-small"
             >
               Cart
-              <span className="bg-red-500 rounded-full ml-2 py-0.5 px-1 ">
-                {cartItems && cartItems.length}
-              </span>
+              {cartItems && cartItems.length > 0 && (
+                <span className="bg-red-500 rounded-full ml-2 py-0.5 px-1 ">
+                  {cartItems && cartItems.length}
+                </span>
+              )}
             </button>
           </Fragment>
         ) : null}
@@ -216,13 +221,18 @@ export default function Navbar() {
               <Fragment>
                 <button className="btn-small">Account</button>
                 <button
-                  onClick={() => router.push("/cart")}
+                  onClick={() => {
+                    router.push("/cart");
+                    setShowCartModal(true);
+                  }}
                   className="btn-small"
                 >
                   Cart
-                  <span className="bg-red-500 rounded-full ml-1 py-0.5 px-1">
-                    {cartItems && cartItems.length}
-                  </span>
+                  {cartItems && cartItems.length > 0 && (
+                    <span className="bg-red-500 rounded-full ml-1 py-0.5 px-1">
+                      {cartItems && cartItems.length}
+                    </span>
+                  )}
                 </button>
               </Fragment>
             ) : null}
@@ -277,6 +287,7 @@ export default function Navbar() {
             router={router}
             pathName={pathName}
             setShowNavModal={setShowNavModal}
+            setShowCartModal={setShowCartModal}
             isAuthUser={isAuthUser}
             cartItems={cartItems}
             handleLogout={handleLogout}
@@ -294,6 +305,7 @@ export default function Navbar() {
             router={router}
             pathName={pathName}
             setShowNavModal={setShowNavModal}
+            setShowCartModal={setShowCartModal}
             isAuthUser={isAuthUser}
             cartItems={cartItems}
             handleLogout={handleLogout}

@@ -3,6 +3,7 @@
 import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { ProductDetailsProps } from "@/components/CommonListing";
+import { CartItem } from "@/components/CommonCart";
 
 export type User = {
   _id: string;
@@ -36,10 +37,8 @@ type GlobalContextType = {
   >;
   showCartModal: boolean;
   setShowCartModal: React.Dispatch<React.SetStateAction<boolean>>;
-  cartItems: ProductDetailsProps[] | [];
-  setCartItems: React.Dispatch<
-    React.SetStateAction<ProductDetailsProps[] | []>
-  >;
+  cartItems: CartItem[] | [];
+  setCartItems: React.Dispatch<React.SetStateAction<CartItem[] | []>>;
 };
 
 type GlobalContextProviderProps = {
@@ -50,7 +49,7 @@ export const GlobalContext = createContext({} as GlobalContextType); // Type ass
 
 export default function GlobalState({ children }: GlobalContextProviderProps) {
   const [showNavModal, setShowNavModal] = useState<boolean>(false);
-  const [pageLevelLoader, setPageLevelLoader] = useState<boolean>(false);
+  const [pageLevelLoader, setPageLevelLoader] = useState<boolean>(true);
   const [componentLevelLoader, setComponentLevelLoader] = useState({
     loading: false,
     id: "",
@@ -60,7 +59,7 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
   const [currentUpdatedProduct, setCurrentUpdatedProduct] =
     useState<ProductDetailsProps | null>(null);
   const [showCartModal, setShowCartModal] = useState<boolean>(false);
-  const [cartItems, setCartItems] = useState<ProductDetailsProps[] | []>([]);
+  const [cartItems, setCartItems] = useState<CartItem[] | []>([]);
 
   useEffect(() => {
     if (Cookies.get("token") !== undefined) {
