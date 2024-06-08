@@ -9,7 +9,7 @@ import ComponentLevelLoader from "../Loaders/ComponentLevelLoader";
 import { addCartItem } from "@/services/cart";
 
 type ProductDeleteType = Required<ProductDetailsProps>;
-type AddCardType = Required<ProductDetailsProps>;
+export type AddCardType = Required<ProductDetailsProps>;
 
 export default function ProductCardButton({
   item,

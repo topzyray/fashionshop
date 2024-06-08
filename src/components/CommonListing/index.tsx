@@ -1,4 +1,3 @@
-import { useRouter } from "next/navigation";
 import Notification from "../Notification";
 import ProductCard from "./ProductCard";
 import ProductCardButton from "./ProductCardButton";

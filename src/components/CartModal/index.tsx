@@ -22,11 +22,13 @@ export default function CartModal() {
   const router = useRouter();
 
   const fetchAllCartItems = async () => {
-    const response = await getAllCartItems(user?._id);
+    if (user !== null) {
+      const response = await getAllCartItems(user?._id);
 
-    if (response.success) {
-      setCartItems(response.data);
-      localStorage.setItem("cartItems", JSON.stringify(response.data));
+      if (response.success) {
+        setCartItems(response.data);
+        localStorage.setItem("cartItems", JSON.stringify(response.data));
+      }
     }
   };
 
@@ -86,12 +88,39 @@ export default function CartModal() {
                         </Link>
                       </h3>
                     </div>
-                    <p className="mt-1 text-sm text-gray-600">
-                      ₦
+
+                    <p
+                      className={`mt-1 text-sm text-gray-600 ${
+                        cartItem &&
+                        cartItem.productId &&
+                        cartItem.productId.onSale === "yes"
+                          ? "line-through"
+                          : ""
+                      }`}
+                    >
+                      ₦{" "}
                       {cartItem &&
                         cartItem.productId &&
                         cartItem.productId.price}
                     </p>
+                    <div className="flex gap-2">
+                      {cartItem &&
+                      cartItem.productId &&
+                      cartItem.productId.onSale === "yes" ? (
+                        <p className="mt-1 text-sm text-red-600">{`₦${(
+                          cartItem.productId.price -
+                          cartItem.productId.price *
+                            (cartItem.productId.priceDrop / 100)
+                        ).toFixed(2)}`}</p>
+                      ) : null}
+                      {cartItem &&
+                      cartItem.productId &&
+                      cartItem.productId.onSale === "yes" ? (
+                        <p className="mt-1 text-sm text-gray-600 self-end">
+                          -(₦{cartItem.productId.priceDrop}%)off
+                        </p>
+                      ) : null}
+                    </div>
                   </div>
                   <div className="flex flex-1 items-end justify-between text-sm">
                     <button
