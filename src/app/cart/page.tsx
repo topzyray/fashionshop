@@ -3,11 +3,13 @@
 import CommonCart from "@/components/CommonCart";
 import { GlobalContext } from "@/context/global-context";
 import { deleteCartItem, getAllCartItems } from "@/services/cart";
+import { useRouter } from "next/navigation";
 import React, { useContext, useEffect } from "react";
 import { PulseLoader } from "react-spinners";
 import { toast, ToastPosition } from "react-toastify";
 
 export default function CartPage() {
+  const router = useRouter();
   const {
     user,
     cartItems,
@@ -32,6 +34,10 @@ export default function CartPage() {
   };
 
   useEffect(() => {
+    if (user === null) {
+      router.push("/login");
+      return;
+    }
     if (user !== null) {
       fetchAllCartItems();
     }

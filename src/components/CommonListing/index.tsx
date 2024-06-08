@@ -33,7 +33,7 @@ export default function CommonListingGrid({
           {data && data.length
             ? data.map((item: ProductDetailsProps) => (
                 <article
-                  className="relative flex flex-col overflow-hidden border cursor-pointer hover:shadow-md transition-all ease-in-out duration-300"
+                  className="rounded-xl relative flex flex-col overflow-hidden border cursor-pointer hover:shadow-md transition-all ease-in-out duration-300"
                   key={item._id}
                 >
                   <Link href={`/product/${item._id}`}>

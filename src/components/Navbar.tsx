@@ -87,7 +87,15 @@ function NavItems({
       <div className=" flex flex-col sm:hidden gap-2">
         {!isAdminView && isAuthUser ? (
           <Fragment>
-            <button className="btn-small">Account</button>
+            <button
+              onClick={() => {
+                setShowNavModal(false);
+                router.push("/account");
+              }}
+              className="btn-small"
+            >
+              Account
+            </button>
             <button
               onClick={() => {
                 setShowNavModal(false);
@@ -186,14 +194,14 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-white w-full fixed z-20 top-0 left-0 border-b border-gray-200">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <nav className="bg-white/95 w-full fixed z-20 top-0 left-0 border-b border-gray-200">
+        <div className="max-w-sceen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <div className="w-full sm:w-0 flex items-center justify-between cursor-pointer">
             <span
               onClick={() => router.push("/")}
               className="self-center text-2xl font-semibold whitespace-nowrap"
             >
-              <span className="bg-black text-white">Fashion</span>Shop
+              <span className="bg-dark-blue text-white">Fashion</span>Shop
             </span>
 
             {/* Hamburger Menu only mobile screen */}
@@ -219,7 +227,12 @@ export default function Navbar() {
           <div className="hidden sm:flex lg:order-2 gap-2">
             {!isAdminView && isAuthUser ? (
               <Fragment>
-                <button className="btn-small">Account</button>
+                <button
+                  onClick={() => router.push("/account")}
+                  className="btn-small"
+                >
+                  Account
+                </button>
                 <button
                   onClick={() => {
                     router.push("/cart");

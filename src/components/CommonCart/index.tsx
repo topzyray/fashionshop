@@ -200,7 +200,7 @@ export default function CommonCart({
               <div className="mt-6 border-t border-b py-2">
                 <div className="flex items-center justify-between">
                   <p className="text-sm text-gray-400">Subtotal</p>
-                  <p className="text-base sm:text-lg text-black font-semibold">
+                  <p className="text-base sm:text-lg text-dark-blue font-semibold">
                     ₦
                     {cartItems && cartItems.length
                       ? cartItems.reduce(
@@ -218,14 +218,14 @@ export default function CommonCart({
 
                 <div className="flex items-center justify-between">
                   <p className="text-sm text-gray-400">Shipping</p>
-                  <p className="text-base sm:text-lg text-black font-semibold">
+                  <p className="text-base sm:text-lg text-dark-blue font-semibold">
                     ₦0
                   </p>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <p className="text-sm text-gray-400">Total</p>
-                  <p className="text-base sm:text-lg text-black font-semibold">
+                  <p className="text-base sm:text-lg text-dark-blue font-semibold">
                     ₦
                     {cartItems && cartItems.length
                       ? cartItems.reduce(

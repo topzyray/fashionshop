@@ -26,18 +26,18 @@ export default function TileComponent({
             selected
               .map((item: { id: string }) => item.id)
               .indexOf(dataItem.id) !== -1
-              ? "bg-black text-white"
+              ? "bg-dark-blue text-white"
               : ""
           }`}
         >
           <span
-            className={`rounded-lg border border-gray-300 px-6 py-2 font-bold ${
+            className={` hover:shadow-sm hover:opacity-60 rounded-lg border border-gray-300 px-6 py-2 font-bold ${
               selected &&
               selected.length &&
               selected
                 .map((item: { id: string }) => item.id)
                 .indexOf(dataItem.id) !== -1
-                ? "bg-black text-white"
+                ? "bg-dark-blue text-white"
                 : ""
             }`}
           >

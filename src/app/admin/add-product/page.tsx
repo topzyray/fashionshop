@@ -167,7 +167,7 @@ export default function AdminAddNewProduc() {
 
   return (
     <section className="w-full mt-5 mr-0 mb-5 ml-0 px-5 relative">
-      <div className="max-w-4xl flex flex-col items-center justify-start mx-auto p-5 sm:p-10 bg-white shadow-2xl rounded-xl relative">
+      <div className="max-w-xl flex flex-col items-center justify-start mx-auto p-5 sm:p-10 bg-white shadow-2xl rounded-xl relative">
         <p className="w-full text-xl md:text-3xl font-medium text-center font-serif">
           {currentUpdatedProduct && currentUpdatedProduct !== null
             ? "Update Product Page"
@@ -237,7 +237,10 @@ export default function AdminAddNewProduc() {
                 />
               ) : null
           )}
-          <button onClick={handleAddNewProduct} className="btn-large">
+          <button
+            onClick={handleAddNewProduct}
+            className="btn-large max-w-max mx-auto flex justify-center"
+          >
             {componentLevelLoader && componentLevelLoader.loading ? (
               <ComponentLevelLoader
                 text={

@@ -4,6 +4,7 @@ import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { ProductDetailsProps } from "@/components/CommonListing";
 import { CartItem } from "@/components/CommonCart";
+import { usePathname, useRouter } from "next/navigation";
 
 export type User = {
   _id: string;
@@ -61,6 +62,9 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
   const [showCartModal, setShowCartModal] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<CartItem[] | []>([]);
 
+  const router = useRouter();
+  const pathName = usePathname();
+
   useEffect(() => {
     if (Cookies.get("token") !== undefined) {
       setIsAuthUser(true);
@@ -74,6 +78,17 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
       setIsAuthUser(false);
     }
   }, [Cookies]);
+
+  useEffect(() => {
+    // if (user === null) {
+    //   router.push("/login");
+    //   return;
+    // }
+    if (user !== null && user.role !== "admin" && pathName.includes("/admin")) {
+      router.push("/unauthorized");
+      return;
+    }
+  }, [user, router, pathName]);
 
   return (
     <GlobalContext.Provider

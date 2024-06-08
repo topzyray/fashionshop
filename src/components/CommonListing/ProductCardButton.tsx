@@ -75,7 +75,7 @@ export default function ProductCardButton({
     }
   };
 
-  return isAdminView ? (
+  return isAdminView && user?.role === "admin" ? (
     <div className="flex flex-col gap-y-[1px]">
       <button
         onClick={() => {
