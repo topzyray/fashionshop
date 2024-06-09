@@ -32,6 +32,9 @@ export const getAllAddress = async (id: string) => {
       `http://localhost:3000/api/address/get-all-address?id=${id}`,
       {
         cache: "no-store",
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
       }
     );
 

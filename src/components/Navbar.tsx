@@ -212,11 +212,11 @@ export default function Navbar() {
               {!showNavModal ? (
                 <AiOutlineMenu
                   size={35}
-                  className="text-primary hover:text-white "
+                  className="text-dark-blue hover:bg-dark-blue hover:text-white  "
                 />
               ) : (
                 <AiOutlineClose
-                  className="text-primary hover:text-white hover:rounded-lg p-1"
+                  className="text-dark-blue hover:bg-dark-blue hover:text-white hover:rounded-lg p-1"
                   size={35}
                 />
               )}
@@ -284,11 +284,11 @@ export default function Navbar() {
               {!showNavModal ? (
                 <AiOutlineMenu
                   size={35}
-                  className="text-primary hover:text-white "
+                  className="text-dark-blue hover:bg-dark-blue hover:text-white "
                 />
               ) : (
                 <AiOutlineClose
-                  className="text-primary hover:text-white hover:rounded-lg p-1"
+                  className="text-dark-blue hover:bg-dark-blue hover:text-white hover:rounded-lg p-1"
                   size={35}
                 />
               )}

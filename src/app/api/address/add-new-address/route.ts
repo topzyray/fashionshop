@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
         });
       }
       const newAddress = await Address.create({
-        addressData,
+        ...addressData,
       });
 
       if (newAddress) {

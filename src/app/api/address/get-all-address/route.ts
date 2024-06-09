@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
+
     if (!id) {
       return NextResponse.json({
         success: false,
@@ -20,8 +21,10 @@ export async function GET(request: NextRequest) {
     }
 
     const isAuthUser = await AuthenticateUser(request);
+
     if (isAuthUser) {
       const getAllAddress = await Address.find({ userId: id });
+
       if (getAllAddress) {
         return NextResponse.json({
           success: true,

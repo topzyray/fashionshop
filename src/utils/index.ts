@@ -205,3 +205,41 @@ export const availableSizes = [
     label: "XL",
   },
 ];
+
+export const addNewAddressFormControls = [
+  {
+    id: "fullName",
+    type: "text",
+    placeholder: "Enter your full name",
+    label: "Full Name",
+    componentType: "input",
+  },
+  {
+    id: "address",
+    type: "text",
+    placeholder: "Enter your address",
+    label: "Address",
+    componentType: "input",
+  },
+  {
+    id: "city",
+    type: "text",
+    placeholder: "Enter your city",
+    label: "City",
+    componentType: "input",
+  },
+  {
+    id: "country",
+    type: "text",
+    placeholder: "Enter your country",
+    label: "Country",
+    componentType: "input",
+  },
+  {
+    id: "postalCode",
+    type: "text",
+    placeholder: "Enter your postal code",
+    label: "Postal Code",
+    componentType: "input",
+  },
+];

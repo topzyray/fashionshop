@@ -13,6 +13,15 @@ export type User = {
   role: string;
 };
 
+export interface AddressFormData {
+  fullName: string;
+  address: string;
+  city: string;
+  country: string;
+  postalCode: string;
+  userId: string;
+}
+
 type GlobalContextType = {
   showNavModal: boolean;
   setShowNavModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,6 +49,10 @@ type GlobalContextType = {
   setShowCartModal: React.Dispatch<React.SetStateAction<boolean>>;
   cartItems: CartItem[] | [];
   setCartItems: React.Dispatch<React.SetStateAction<CartItem[] | []>>;
+  addresses: AddressFormData[] | [];
+  setAddresses: React.Dispatch<React.SetStateAction<AddressFormData[] | []>>;
+  addressFormData: AddressFormData;
+  setAddressFormData: React.Dispatch<React.SetStateAction<AddressFormData>>;
 };
 
 type GlobalContextProviderProps = {
@@ -61,6 +74,15 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
     useState<ProductDetailsProps | null>(null);
   const [showCartModal, setShowCartModal] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<CartItem[] | []>([]);
+  const [addresses, setAddresses] = useState<AddressFormData[] | []>([]);
+  const [addressFormData, setAddressFormData] = useState<AddressFormData>({
+    fullName: "",
+    address: "",
+    city: "",
+    country: "",
+    postalCode: "",
+    userId: "",
+  });
 
   const router = useRouter();
   const pathName = usePathname();
@@ -109,6 +131,10 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
         setShowCartModal,
         cartItems,
         setCartItems,
+        addresses,
+        setAddresses,
+        addressFormData,
+        setAddressFormData,
       }}
     >
       {children}
