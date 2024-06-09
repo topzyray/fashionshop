@@ -242,13 +242,15 @@ export default function CommonCart({
                 </div>
 
                 <div className="flex justify-end">
-                  <button
-                    disabled={cartItems && cartItems.length <= 0}
-                    type="button"
-                    className="group btn-small"
-                  >
-                    Checkout
-                  </button>
+                  <Link href="/checkout">
+                    <button
+                      disabled={cartItems && cartItems.length <= 0}
+                      type="button"
+                      className="group btn-small"
+                    >
+                      Checkout
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>

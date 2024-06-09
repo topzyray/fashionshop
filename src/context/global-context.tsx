@@ -22,6 +22,15 @@ export interface AddressFormData {
   userId: string;
 }
 
+export interface CheckoutFormData {
+  shippingAddress: {};
+  paymentMethod: string;
+  totalPrice: number;
+  isPaid: boolean;
+  paidAt: Date;
+  isProcessing: boolean;
+}
+
 type GlobalContextType = {
   showNavModal: boolean;
   setShowNavModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -53,6 +62,8 @@ type GlobalContextType = {
   setAddresses: React.Dispatch<React.SetStateAction<AddressFormData[] | []>>;
   addressFormData: AddressFormData;
   setAddressFormData: React.Dispatch<React.SetStateAction<AddressFormData>>;
+  checkoutFormData: CheckoutFormData;
+  setCheckoutFormData: React.Dispatch<React.SetStateAction<CheckoutFormData>>;
 };
 
 type GlobalContextProviderProps = {
@@ -60,6 +71,24 @@ type GlobalContextProviderProps = {
 };
 
 export const GlobalContext = createContext({} as GlobalContextType); // Type assertion
+
+export const initialAddressFormData = {
+  fullName: "",
+  address: "",
+  city: "",
+  country: "",
+  postalCode: "",
+  userId: "",
+};
+
+export const initialCheckoutFormData = {
+  shippingAddress: {},
+  paymentMethod: "",
+  totalPrice: 0,
+  isPaid: false,
+  paidAt: new Date(),
+  isProcessing: true,
+};
 
 export default function GlobalState({ children }: GlobalContextProviderProps) {
   const [showNavModal, setShowNavModal] = useState<boolean>(false);
@@ -75,14 +104,12 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
   const [showCartModal, setShowCartModal] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<CartItem[] | []>([]);
   const [addresses, setAddresses] = useState<AddressFormData[] | []>([]);
-  const [addressFormData, setAddressFormData] = useState<AddressFormData>({
-    fullName: "",
-    address: "",
-    city: "",
-    country: "",
-    postalCode: "",
-    userId: "",
-  });
+  const [addressFormData, setAddressFormData] = useState<AddressFormData>(
+    initialAddressFormData
+  );
+  const [checkoutFormData, setCheckoutFormData] = useState<CheckoutFormData>(
+    initialCheckoutFormData
+  );
 
   const router = useRouter();
   const pathName = usePathname();
@@ -90,27 +117,27 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
   useEffect(() => {
     if (Cookies.get("token") !== undefined) {
       setIsAuthUser(true);
-      const userData = localStorage.getItem("user");
-      if (userData !== null) {
-        setUser(JSON.parse(userData));
-      } else {
-        setUser(null);
-      }
+      const userData = JSON.parse(localStorage.getItem("user")) || ({} as User);
+      const cartItemsData = JSON.parse(localStorage.getItem("cartItems")) || [];
+      const addressesData = JSON.parse(localStorage.getItem("addresses")) || [];
+      setUser(userData);
+      setCartItems(cartItemsData);
+      setAddresses(addressesData);
     } else {
       setIsAuthUser(false);
     }
   }, [Cookies]);
 
-  useEffect(() => {
-    // if (user === null) {
-    //   router.push("/login");
-    //   return;
-    // }
-    if (user !== null && user.role !== "admin" && pathName.includes("/admin")) {
-      router.push("/unauthorized");
-      return;
-    }
-  }, [user, router, pathName]);
+  // useEffect(() => {
+  //   // if (user === null) {
+  //   //   router.push("/login");
+  //   //   return;
+  //   // }
+  //   if (user !== null && user.role !== "admin" && pathName.includes("/admin")) {
+  //     router.push("/unauthorized");
+  //     return;
+  //   }
+  // }, [user, router, pathName]);
 
   return (
     <GlobalContext.Provider
@@ -135,6 +162,8 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
         setAddresses,
         addressFormData,
         setAddressFormData,
+        checkoutFormData,
+        setCheckoutFormData,
       }}
     >
       {children}

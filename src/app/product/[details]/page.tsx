@@ -1,5 +1,3 @@
-"use client";
-
 import CommonDetails from "@/components/CommonDetails";
 import { getProductById } from "@/services/product";
 

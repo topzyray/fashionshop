@@ -167,6 +167,10 @@ export default function CartModal() {
             Go To Cart
           </button>
           <button
+            onClick={() => {
+              setShowCartModal(false);
+              router.push("/checkout");
+            }}
             disabled={cartItems && cartItems.length === 0}
             type="button"
             className="btn-small"
@@ -175,7 +179,10 @@ export default function CartModal() {
           </button>
           <div className="mt-6 flex justify-center text-center text-sm text-gray-600">
             <button
-              onClick={() => setShowCartModal(false)}
+              onClick={() => {
+                setShowCartModal(false);
+                router.push("/product/listing/all-products");
+              }}
               type="button"
               className="font-medium hover:underline"
             >
