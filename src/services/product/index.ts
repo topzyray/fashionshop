@@ -23,9 +23,7 @@ export const getAllProducts = async () => {
   try {
     const response = await fetch(
       "http://localhost:3000/api/client/all-products",
-      {
-        cache: "no-store",
-      }
+      { method: "GET", cache: "no-store" }
     );
 
     const data = await response.json();

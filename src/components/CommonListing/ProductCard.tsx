@@ -26,16 +26,16 @@ export default function ProductCard({ item }: { item: ProductDetailsProps }) {
               className={`mr-3 text-sm font-semibold ${
                 item.onSale === "yes" ? "line-through" : ""
               }`}
-            >{`₦${item.price}`}</p>
+            >{`$${item.price}`}</p>
             {item.onSale === "yes" ? (
-              <p className="mr-3 text-sm font-semibold text-red-600">{`₦${(
+              <p className="mr-3 text-sm font-semibold text-red-600">{`$${(
                 item.price -
                 item.price * (item.priceDrop / 100)
               ).toFixed(2)}`}</p>
             ) : null}
             {item.onSale === "yes" ? (
               <p className="mr-3 text-sm font-semibold">
-                -(₦{item.priceDrop}%)off
+                -(${item.priceDrop}%)off
               </p>
             ) : null}
           </div>

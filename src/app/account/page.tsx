@@ -42,13 +42,6 @@ export default function AccountPage() {
     setComponentLevelLoader,
   } = useContext(GlobalContext);
 
-  // useEffect(() => {
-  //   if (user === null) {
-  //     router.push("/login");
-  //     return;
-  //   }
-  // }, [user]);
-
   const fetchAllAddresses = async () => {
     if (user !== null) {
       const response = await getAllAddress(user?._id);
@@ -161,12 +154,17 @@ export default function AccountPage() {
                   {user && user?.email}
                 </p>
                 <p className="text-sm text-center md:text-left">
-                  {user &&
+                  {user && user?.role}
+                  {/* {user &&
                     user?.role.slice(0, 1).toUpperCase() +
-                      user?.role.slice(1).toLowerCase()}
+                      user?.role.slice(1).toLowerCase()} */}
                 </p>
               </div>
-              <button type="button" className="btn-small mt-5">
+              <button
+                onClick={() => router.push("/orders")}
+                type="button"
+                className="btn-small mt-5"
+              >
                 View Your Orders
               </button>
             </div>

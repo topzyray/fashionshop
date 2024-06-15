@@ -1,11 +1,8 @@
 import Cookies from "js-cookie";
 
-export const addCartItem = async (formData: {
-  productId: string;
-  userId: string;
-}) => {
+export const createNewOrder = async (formData: OrdersType) => {
   try {
-    const response = await fetch("/api/cart/add-to-cart", {
+    const response = await fetch("/api/order/create-order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -13,7 +10,6 @@ export const addCartItem = async (formData: {
       },
       body: JSON.stringify(formData),
     });
-
     const data = await response.json();
     return data;
   } catch (err) {
@@ -21,10 +17,10 @@ export const addCartItem = async (formData: {
   }
 };
 
-export const getAllCartItems = async (id: string) => {
+export const getAllOrdersForAUser = async (userId: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/cart/all-cart-items?id=${id}`,
+      `http://localhost:3000/api/order/get-all-orders?id=${userId}`,
       {
         method: "GET",
         headers: {
@@ -33,7 +29,6 @@ export const getAllCartItems = async (id: string) => {
         cache: "no-store",
       }
     );
-
     const data = await response.json();
     return data;
   } catch (err) {
@@ -41,15 +36,18 @@ export const getAllCartItems = async (id: string) => {
   }
 };
 
-export const deleteCartItem = async (id: string) => {
+export const getOrderDetails = async (orderId: string) => {
   try {
-    const response = await fetch(`/api/cart/delete-from-cart?id=${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${Cookies.get("token")}`,
-      },
-    });
-
+    const response = await fetch(
+      `http://localhost:3000/api/order/order-details?id=${orderId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+        cache: "no-store",
+      }
+    );
     const data = await response.json();
     return data;
   } catch (err) {

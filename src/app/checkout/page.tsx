@@ -1,13 +1,21 @@
 "use client";
 
+import Notification from "@/components/Notification";
 import { GlobalContext } from "@/context/global-context";
 import { getAllAddress } from "@/services/address";
-import { useRouter } from "next/navigation";
+import { createNewOrder } from "@/services/order";
+import { callStripeSession } from "@/services/stripe";
+import { loadStripe } from "@stripe/stripe-js";
+import { Item } from "firebase/analytics";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
+import { PulseLoader } from "react-spinners";
+import { toast, ToastPosition } from "react-toastify";
 
 export default function Checkout() {
   const [selectedAddress, setSelectedAddress] = useState<boolean | null>(null);
-  const router = useRouter();
+  const [isOrderProcessing, setIsOrderProcessing] = useState<boolean>(false);
+  const [orderSuccess, setOrderSuccess] = useState<boolean>(false);
   const {
     cartItems,
     user,
@@ -16,6 +24,8 @@ export default function Checkout() {
     checkoutFormData,
     setCheckoutFormData,
   } = useContext(GlobalContext);
+  const router = useRouter();
+  const params = useSearchParams();
 
   const fetchAllAddresses = async () => {
     if (user !== null) {
@@ -33,6 +43,64 @@ export default function Checkout() {
       fetchAllAddresses();
     }
   }, [user]);
+
+  useEffect(() => {
+    const createFinalOrder = async () => {
+      const isStripe = JSON.parse(localStorage.getItem("stripe"));
+      if (
+        isStripe &&
+        params.get("status") === "success" &&
+        cartItems &&
+        cartItems.length > 0
+      ) {
+        setIsOrderProcessing(true);
+        const getCheckoutFormData = JSON.parse(
+          localStorage.getItem("checkoutFormData")
+        );
+
+        const createFinalCheckoutFormData = {
+          user: user?._id,
+          shippingAddress: getCheckoutFormData.shippingAddress,
+          orderItems: cartItems.map((item) => ({
+            qty: 1,
+            product: item.productId,
+          })),
+          paymentMethod: "Stripe",
+          totalPrice: cartItems
+            .reduce(
+              (total, item) =>
+                (item.productId.onSale === "yes"
+                  ? item.productId.price -
+                    item.productId.price * (item.productId.priceDrop / 100)
+                  : item.productId.price) + total,
+              0
+            )
+            .toFixed(2),
+          isPaid: true,
+          isProcessing: true,
+          paidAt: new Date(),
+        };
+
+        const response = await createNewOrder(createFinalCheckoutFormData);
+        if (response.success) {
+          setIsOrderProcessing(false);
+          setOrderSuccess(true);
+          toast.success(response.message, {
+            position: "top-right" as ToastPosition,
+          });
+          localStorage.removeItem("cartItems");
+        } else {
+          setIsOrderProcessing(false);
+          setOrderSuccess(false);
+          toast.error(response.message, {
+            position: "top-right" as ToastPosition,
+          });
+        }
+      }
+    };
+
+    createFinalOrder();
+  }, [params.get("status"), cartItems]);
 
   const handleSelectedAddress = (getAddress) => {
     if (getAddress._id === selectedAddress) {
@@ -56,6 +124,91 @@ export default function Checkout() {
       },
     });
   };
+
+  // For stripe
+  const publishableKey =
+    "pk_test_51PPq9d2MsXx4V0jPYSNxULAr79VHkCzVR9mQVwJKiTV8sbSaYqXaEKPDZG4m3Ym3948Sbl8ytZai8zURTMDooCNh00sDJ1bHNS";
+  const stripePromise = loadStripe(publishableKey);
+
+  const handleCheckout = async () => {
+    const stripe = await stripePromise;
+    const createLineItems = cartItems.map((item) => ({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: item.productId.name,
+          images: [item.productId.imageUrl],
+        },
+        unit_amount:
+          item.productId.onSale === "yes"
+            ? (
+                (item.productId.price -
+                  item.productId.price * (item.productId.priceDrop / 100)) *
+                100
+              ).toFixed(0)
+            : item.productId.price * 100,
+      },
+      quantity: 1,
+    }));
+
+    const response = await callStripeSession(createLineItems);
+    setIsOrderProcessing(true);
+    localStorage.setItem("stripe", true);
+    localStorage.setItem("checkoutFormData", JSON.stringify(checkoutFormData));
+
+    const { error } = await stripe?.redirectToCheckout({
+      sessionId: response.id,
+    });
+    console.log(error);
+  };
+
+  useEffect(() => {
+    if (orderSuccess) {
+      setTimeout(() => {
+        router.push("/orders");
+      }, 3000);
+    }
+  }, [orderSuccess]);
+
+  if (orderSuccess) {
+    return (
+      <section className="h-screen bg-gray-200">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mt-8 max-w-screen-sm px-4 sm:px-6 lg:px-8">
+            <div className="bg-white shadow">
+              <div className="px-4 py-6 sm:px-8 sm:py-10 flex flex-col justify-center items-center gap-5">
+                <h1 className="font-medium text-base sm:text-lg text-center">
+                  Your payment is successful and you will be redirected to
+                  orders page in 3 seconds. If you were not redirected, please
+                  click{" "}
+                  <span
+                    onClick={() => router.push("/orders")}
+                    className="font-bold hover:underline"
+                  >
+                    here
+                  </span>{" "}
+                  to visit the orders page.
+                </h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (isOrderProcessing) {
+    return (
+      <section className="w-full min-h-screen flex justify-center items-center">
+        <PulseLoader
+          color={"#000000"}
+          loading={isOrderProcessing}
+          size={20}
+          data-testid="loader"
+        />
+      </section>
+    );
+  }
 
   return (
     <section>
@@ -81,6 +234,7 @@ export default function Checkout() {
                       {item && item.productId && item.productId.name}
                     </span>
                     <span className="font-semibold">
+                      $
                       {item && item.productId && item.productId.onSale === "yes"
                         ? (
                             item.productId.price -
@@ -142,7 +296,7 @@ export default function Checkout() {
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium text-gray-900">Subtotal</p>
                 <p className="text-lg font-bold text-gray-900">
-                  ₦
+                  $
                   {cartItems && cartItems.length
                     ? cartItems
                         .reduce(
@@ -170,7 +324,7 @@ export default function Checkout() {
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium text-gray-900">Total</p>
                 <p className="text-lg font-bold text-gray-900">
-                  ₦
+                  $
                   {cartItems && cartItems.length
                     ? cartItems
                         .reduce(
@@ -189,6 +343,7 @@ export default function Checkout() {
 
               <div className="pb-10">
                 <button
+                  onClick={handleCheckout}
                   disabled={
                     (cartItems && cartItems.length <= 0) ||
                     Object.keys(checkoutFormData.shippingAddress).length === 0
@@ -203,6 +358,7 @@ export default function Checkout() {
           </div>
         </div>
       </div>
+      <Notification />
     </section>
   );
 }

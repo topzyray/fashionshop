@@ -6,70 +6,6 @@ import { ProductDetailsProps } from "@/components/CommonListing";
 import { CartItem } from "@/components/CommonCart";
 import { usePathname, useRouter } from "next/navigation";
 
-export type User = {
-  _id: string;
-  name: string;
-  email: string;
-  role: string;
-};
-
-export interface AddressFormData {
-  fullName: string;
-  address: string;
-  city: string;
-  country: string;
-  postalCode: string;
-  userId: string;
-}
-
-export interface CheckoutFormData {
-  shippingAddress: {};
-  paymentMethod: string;
-  totalPrice: number;
-  isPaid: boolean;
-  paidAt: Date;
-  isProcessing: boolean;
-}
-
-type GlobalContextType = {
-  showNavModal: boolean;
-  setShowNavModal: React.Dispatch<React.SetStateAction<boolean>>;
-  isAuthUser: boolean;
-  setIsAuthUser: React.Dispatch<React.SetStateAction<boolean>>;
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  pageLevelLoader: boolean;
-  setPageLevelLoader: React.Dispatch<React.SetStateAction<boolean>>;
-  componentLevelLoader: {
-    loading: boolean;
-    id: string;
-  };
-  setComponentLevelLoader: React.Dispatch<
-    React.SetStateAction<{
-      loading: boolean;
-      id: string;
-    }>
-  >;
-  currentUpdatedProduct: ProductDetailsProps | null;
-  setCurrentUpdatedProduct: React.Dispatch<
-    React.SetStateAction<ProductDetailsProps | null>
-  >;
-  showCartModal: boolean;
-  setShowCartModal: React.Dispatch<React.SetStateAction<boolean>>;
-  cartItems: CartItem[] | [];
-  setCartItems: React.Dispatch<React.SetStateAction<CartItem[] | []>>;
-  addresses: AddressFormData[] | [];
-  setAddresses: React.Dispatch<React.SetStateAction<AddressFormData[] | []>>;
-  addressFormData: AddressFormData;
-  setAddressFormData: React.Dispatch<React.SetStateAction<AddressFormData>>;
-  checkoutFormData: CheckoutFormData;
-  setCheckoutFormData: React.Dispatch<React.SetStateAction<CheckoutFormData>>;
-};
-
-type GlobalContextProviderProps = {
-  children: React.ReactNode;
-};
-
 export const GlobalContext = createContext({} as GlobalContextType); // Type assertion
 
 export const initialAddressFormData = {
@@ -90,6 +26,22 @@ export const initialCheckoutFormData = {
   isProcessing: true,
 };
 
+const protectedRoutes = [
+  "/cart",
+  "/checkout",
+  "/account",
+  "/orders",
+  "/admin",
+  "/admin/add-product",
+  "/admin/all-products",
+];
+
+const protectedAdminRoutes = [
+  "/admin",
+  "/admin/add-product",
+  "/admin/all-products",
+];
+
 export default function GlobalState({ children }: GlobalContextProviderProps) {
   const [showNavModal, setShowNavModal] = useState<boolean>(false);
   const [pageLevelLoader, setPageLevelLoader] = useState<boolean>(true);
@@ -98,7 +50,7 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
     id: "",
   });
   const [isAuthUser, setIsAuthUser] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null | {}>(null);
   const [currentUpdatedProduct, setCurrentUpdatedProduct] =
     useState<ProductDetailsProps | null>(null);
   const [showCartModal, setShowCartModal] = useState<boolean>(false);
@@ -109,6 +61,9 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
   );
   const [checkoutFormData, setCheckoutFormData] = useState<CheckoutFormData>(
     initialCheckoutFormData
+  );
+  const [allOrdersForUser, setAllOrdersForUser] = useState<OrdersType[] | []>(
+    []
   );
 
   const router = useRouter();
@@ -125,19 +80,31 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
       setAddresses(addressesData);
     } else {
       setIsAuthUser(false);
+      setUser({});
     }
   }, [Cookies]);
 
-  // useEffect(() => {
-  //   // if (user === null) {
-  //   //   router.push("/login");
-  //   //   return;
-  //   // }
-  //   if (user !== null && user.role !== "admin" && pathName.includes("/admin")) {
-  //     router.push("/unauthorized");
-  //     return;
-  //   }
-  // }, [user, router, pathName]);
+  useEffect(() => {
+    if (
+      user &&
+      Object.keys(user).length === 0 &&
+      protectedRoutes.indexOf(pathName) > -1
+    ) {
+      router.push("/login");
+    }
+  }, [user, pathName]);
+
+  useEffect(() => {
+    if (
+      user !== null &&
+      user &&
+      Object.keys(user).length > 0 &&
+      user?.role !== "admin" &&
+      protectedAdminRoutes.indexOf(pathName) > -1
+    ) {
+      router.push("/unauthorized");
+    }
+  }, [user, pathName]);
 
   return (
     <GlobalContext.Provider
@@ -164,6 +131,8 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
         setAddressFormData,
         checkoutFormData,
         setCheckoutFormData,
+        allOrdersForUser,
+        setAllOrdersForUser,
       }}
     >
       {children}

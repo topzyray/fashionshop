@@ -156,14 +156,14 @@ export default function AdminAddNewProduc() {
     }
   }, [currentUpdatedProduct]);
 
-  useEffect(() => {
-    if (isAuthUser && user?.role !== "admin") {
-      router.push("/");
-    }
-    if (!isAuthUser) {
-      router.push("/login");
-    }
-  }, [user, isAuthUser]);
+  // useEffect(() => {
+  //   if (isAuthUser && user?.role !== "admin") {
+  //     router.push("/");
+  //   }
+  //   if (!isAuthUser) {
+  //     router.push("/login");
+  //   }
+  // }, [user, isAuthUser]);
 
   return (
     <section className="w-full mt-5 mr-0 mb-5 ml-0 px-5 relative">

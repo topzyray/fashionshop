@@ -103,17 +103,17 @@ export default function CommonDetails({ data }: { data: ProductDetailsProps }) {
                     data.onSale === "yes" ? "line-through" : ""
                   }`}
                 >
-                  ₦ {data.price}
+                  $ {data.price}
                 </h1>
                 {data.onSale === "yes" ? (
-                  <h1 className="text-2xl font-bold text-red-600">{`₦${(
+                  <h1 className="text-2xl font-bold text-red-600">{`$${(
                     data.price -
                     data.price * (data.priceDrop / 100)
                   ).toFixed(2)}`}</h1>
                 ) : null}
                 {data.onSale === "yes" ? (
                   <h1 className="text-sm font-semibold self-end">
-                    -(₦{data.priceDrop}%)off
+                    -(${data.priceDrop}%)off
                   </h1>
                 ) : null}
               </div>

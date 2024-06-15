@@ -98,7 +98,7 @@ export default function CartModal() {
                           : ""
                       }`}
                     >
-                      ₦{" "}
+                      ${" "}
                       {cartItem &&
                         cartItem.productId &&
                         cartItem.productId.price}
@@ -107,7 +107,7 @@ export default function CartModal() {
                       {cartItem &&
                       cartItem.productId &&
                       cartItem.productId.onSale === "yes" ? (
-                        <p className="mt-1 text-sm text-red-600">{`₦${(
+                        <p className="mt-1 text-sm text-red-600">{`$${(
                           cartItem.productId.price -
                           cartItem.productId.price *
                             (cartItem.productId.priceDrop / 100)
@@ -117,7 +117,7 @@ export default function CartModal() {
                       cartItem.productId &&
                       cartItem.productId.onSale === "yes" ? (
                         <p className="mt-1 text-sm text-gray-600 self-end">
-                          -(₦{cartItem.productId.priceDrop}%)off
+                          -(${cartItem.productId.priceDrop}%)off
                         </p>
                       ) : null}
                     </div>

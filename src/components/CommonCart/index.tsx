@@ -70,7 +70,7 @@ export default function CommonCart({
                                       : ""
                                   }`}
                                 >
-                                  ₦{" "}
+                                  ${" "}
                                   {cartItem &&
                                     cartItem.productId &&
                                     cartItem.productId.price}
@@ -79,7 +79,7 @@ export default function CommonCart({
                                 {cartItem &&
                                 cartItem.productId &&
                                 cartItem.productId.onSale === "yes" ? (
-                                  <p className="text-sm font-semibold sm:order-1 text-red-600">{`₦${(
+                                  <p className="text-sm font-semibold sm:order-1 text-red-600">{`$${(
                                     cartItem.productId.price -
                                     cartItem.productId.price *
                                       (cartItem.productId.priceDrop / 100)
@@ -89,7 +89,7 @@ export default function CommonCart({
                                 cartItem.productId &&
                                 cartItem.productId.onSale === "yes" ? (
                                   <p className="text-xs text-gray-600">
-                                    -(₦{cartItem.productId.priceDrop}%)off
+                                    -(${cartItem.productId.priceDrop}%)off
                                   </p>
                                 ) : null}
 
@@ -141,7 +141,7 @@ export default function CommonCart({
                                       : ""
                                   }`}
                                 >
-                                  ₦{" "}
+                                  ${" "}
                                   {cartItem &&
                                     cartItem.productId &&
                                     cartItem.productId.price}
@@ -150,7 +150,7 @@ export default function CommonCart({
                                 {cartItem &&
                                 cartItem.productId &&
                                 cartItem.productId.onSale === "yes" ? (
-                                  <p className="shrink-0 text-base font-semibold sm:order-1 sm:ml-0 sm:text-right text-red-600">{`₦${(
+                                  <p className="shrink-0 text-base font-semibold sm:order-1 sm:ml-0 sm:text-right text-red-600">{`$${(
                                     cartItem.productId.price -
                                     cartItem.productId.price *
                                       (cartItem.productId.priceDrop / 100)
@@ -160,7 +160,7 @@ export default function CommonCart({
                                 cartItem.productId &&
                                 cartItem.productId.onSale === "yes" ? (
                                   <p className="shrink-0 text-sm text-gray-600 self-end">
-                                    -(₦{cartItem.productId.priceDrop}%)off
+                                    -(${cartItem.productId.priceDrop}%)off
                                   </p>
                                 ) : null}
 
@@ -201,7 +201,7 @@ export default function CommonCart({
                 <div className="flex items-center justify-between">
                   <p className="text-sm text-gray-400">Subtotal</p>
                   <p className="text-base sm:text-lg text-dark-blue font-semibold">
-                    ₦
+                    $
                     {cartItems && cartItems.length
                       ? cartItems.reduce(
                           (total, item) =>
@@ -219,14 +219,14 @@ export default function CommonCart({
                 <div className="flex items-center justify-between">
                   <p className="text-sm text-gray-400">Shipping</p>
                   <p className="text-base sm:text-lg text-dark-blue font-semibold">
-                    ₦0
+                    $0
                   </p>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <p className="text-sm text-gray-400">Total</p>
                   <p className="text-base sm:text-lg text-dark-blue font-semibold">
-                    ₦
+                    $
                     {cartItems && cartItems.length
                       ? cartItems.reduce(
                           (total, item) =>
