@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     const isAuthUser = await AuthenticateUser(request);
     if (isAuthUser) {
       const data = await request.json();
+
       if (!data) {
         return NextResponse.json({
           success: false,
@@ -51,7 +52,11 @@ export async function POST(request: NextRequest) {
         });
       }
 
-      const savedProductToCart = await Cart.create(data);
+      const savedProductToCart = await Cart.create({
+        productId: productId,
+        userId: userId,
+      });
+
       if (savedProductToCart) {
         return NextResponse.json({
           success: true,

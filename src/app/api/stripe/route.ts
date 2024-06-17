@@ -10,7 +10,6 @@ export async function POST(response: NextRequest) {
     const isAuthUser = await AuthenticateUser(response);
     if (isAuthUser) {
       const res = await response.json();
-      console.log(res);
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],

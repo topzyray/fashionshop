@@ -6,9 +6,18 @@ import { NextRequest, NextResponse } from "next/server";
 
 const schema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
-  role: Joi.string().required(),
+  email: Joi.string()
+    .email()
+    .pattern(
+      /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|)@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
+    )
+    .required(),
+  password: Joi.string()
+    .pattern(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Password must contain a uppercase, a lowercase, a number and minimum of 8 characters"
+    )
+    .required(),
 });
 
 export const dynamic = "force-dynamic";
@@ -16,10 +25,10 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   // Connect to database
   await connectToDB();
-  const { name, email, password, role } = await request.json();
+  const { name, email, password } = await request.json();
 
   //   Validation schema
-  const { error } = schema.validate({ name, email, password, role });
+  const { error } = schema.validate({ name, email, password });
 
   if (error) {
     return NextResponse.json({
@@ -31,6 +40,7 @@ export async function POST(request: NextRequest) {
   try {
     // Check user already exists
     const isUserAlreadyExists = await User.findOne({ email });
+
     if (isUserAlreadyExists) {
       return NextResponse.json({
         success: false,
@@ -42,7 +52,7 @@ export async function POST(request: NextRequest) {
         name,
         email,
         password: hashPassword,
-        role,
+        role: "customer",
       });
 
       if (newUser) {

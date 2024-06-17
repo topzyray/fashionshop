@@ -1,9 +1,3 @@
-type RegisterNewUserType = {
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-};
 
 export const registerNewUser = async (formData: RegisterNewUserType) => {
   try {

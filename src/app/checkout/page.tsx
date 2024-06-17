@@ -201,7 +201,7 @@ export default function Checkout() {
     return (
       <section className="w-full min-h-screen flex justify-center items-center">
         <PulseLoader
-          color={"#000000"}
+          color={"#1d2939"}
           loading={isOrderProcessing}
           size={20}
           data-testid="loader"
@@ -341,7 +341,7 @@ export default function Checkout() {
                 </p>
               </div>
 
-              <div className="pb-10">
+              <div className="pb-10 flex justify-end">
                 <button
                   onClick={handleCheckout}
                   disabled={
@@ -349,7 +349,7 @@ export default function Checkout() {
                     Object.keys(checkoutFormData.shippingAddress).length === 0
                   }
                   type="button"
-                  className="btn-small w-full mt-5"
+                  className="btn-small mt-5"
                 >
                   Checkout
                 </button>

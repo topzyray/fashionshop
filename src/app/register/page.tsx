@@ -15,14 +15,12 @@ type InitialFormDataType = {
   name: string;
   email: string;
   password: string;
-  role: string;
 };
 
 const initialFormData = {
   name: "",
   email: "",
   password: "",
-  role: "customer",
 };
 
 export default function Register() {
@@ -40,9 +38,7 @@ export default function Register() {
       formData.email &&
       formData.email.trim() !== "" &&
       formData.password &&
-      formData.password.trim() !== "" &&
-      formData.role &&
-      formData.role.trim() !== ""
+      formData.password.trim() !== ""
       ? true
       : false;
   };

@@ -1,3 +1,15 @@
+type RegisterNewUserType = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+type NavOptionsType = {
+  id: string;
+  label: string;
+  path: string;
+};
+
 type User = {
   _id: string;
   name: string;
@@ -22,6 +34,32 @@ interface CheckoutFormData {
   paidAt: Date;
   isProcessing: boolean;
 }
+
+type GlobalContextProviderProps = {
+  children: React.ReactNode;
+};
+
+type OrdersType = {
+  user: string;
+  orderItems: [
+    {
+      qty: number;
+      product: string;
+    }
+  ];
+  shippingAddress: {
+    fullName: string;
+    address: string;
+    city: string;
+    country: string;
+    postalCode: string;
+  };
+  paymentMethod: string;
+  totalPrice: number;
+  isPaid: boolean;
+  paidAt: Date;
+  isProcessing: boolean;
+};
 
 type GlobalContextType = {
   showNavModal: boolean;
@@ -58,30 +96,6 @@ type GlobalContextType = {
   setCheckoutFormData: React.Dispatch<React.SetStateAction<CheckoutFormData>>;
   allOrdersForUser: OrdersType[] | [];
   setAllOrdersForUser: React.Dispatch<React.SetStateAction<OrdersType[] | []>>;
-};
-
-type GlobalContextProviderProps = {
-  children: React.ReactNode;
-};
-
-type OrdersType = {
-  user: string;
-  orderItems: [
-    {
-      qty: number;
-      product: string;
-    }
-  ];
-  shippingAddress: {
-    fullName: string;
-    address: string;
-    city: string;
-    country: string;
-    postalCode: string;
-  };
-  paymentMethod: string;
-  totalPrice: number;
-  isPaid: boolean;
-  paidAt: Date;
-  isProcessing: boolean;
+  orderDetails: OrdersType | null;
+  setOrderDetails: React.Dispatch<React.SetStateAction<OrdersType | null>>;
 };

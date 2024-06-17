@@ -45,7 +45,7 @@ export default function Orders() {
     return (
       <div className="w-full min-h-screen flex justify-center items-center">
         <PulseLoader
-          color={"#000000"}
+          color={"#1d2939"}
           loading={pageLevelLoader}
           size={20}
           data-testid="loader"
@@ -57,7 +57,7 @@ export default function Orders() {
   return (
     <section className="min-h-screen bg-gray-100">
       <div className="mx-auto px-0 sm:px-6 lg:px-8">
-        <div className="mt-4 sm:mt-8 mx-auto max-w-screen-lg px-0 sm:px-6 lg:px-8">
+        <div className="mt-4 mx-auto max-w-screen-lg px-0 sm:px-6 lg:px-8">
           <div>
             <div className="px-4 py-6 sm:px-8 sm:py-10">
               <div className="flow-root">
@@ -81,7 +81,7 @@ export default function Orders() {
                             </p>
                           </div>
                         </div>
-                        <div className="flex gap-2 overflow-x-scroll">
+                        <div className="flex gap-2 overflow-x-auto">
                           {item.orderItems.map((orderItem, index) => (
                             <div key={index} className="shrink-0 ">
                               <img
@@ -113,7 +113,7 @@ export default function Orders() {
                     ))}
                   </ul>
                 ) : (
-                  <div className="text-base sm:text-lg md:text-xl font-medium">
+                  <div className="bg-white rounded-lg shadow p-4 flex flex-col space-y-3 py-6 text-left text-base sm:text-lg md:text-xl font-medium">
                     No order(s) found!
                   </div>
                 )}

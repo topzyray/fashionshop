@@ -47,7 +47,7 @@ export default function CartPage() {
     return (
       <div className="w-full min-h-screen flex justify-center items-center">
         <PulseLoader
-          color={"#000000"}
+          color={"#1d2939"}
           loading={pageLevelLoader}
           size={20}
           data-testid="loader"

@@ -1,9 +1,3 @@
-export type NavOptionsType = {
-  id: string;
-  label: string;
-  path: string;
-};
-
 export const clientNavOptions: NavOptionsType[] = [
   {
     id: "home",
@@ -67,23 +61,23 @@ export const registrationFormControls = [
     label: "Password",
     componentType: "input",
   },
-  {
-    id: "role",
-    type: "",
-    placeholder: "",
-    label: "Role",
-    componentType: "select",
-    options: [
-      {
-        id: "admin",
-        label: "Admin",
-      },
-      {
-        id: "customer",
-        label: "Customer",
-      },
-    ],
-  },
+  // {
+  //   id: "role",
+  //   type: "",
+  //   placeholder: "",
+  //   label: "Role",
+  //   componentType: "select",
+  //   options: [
+  //     {
+  //       id: "admin",
+  //       label: "Admin",
+  //     },
+  //     {
+  //       id: "customer",
+  //       label: "Customer",
+  //     },
+  //   ],
+  // },
 ];
 
 export const loginFormControls = [

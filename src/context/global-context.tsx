@@ -26,15 +26,7 @@ export const initialCheckoutFormData = {
   isProcessing: true,
 };
 
-const protectedRoutes = [
-  "/cart",
-  "/checkout",
-  "/account",
-  "/orders",
-  "/admin",
-  "/admin/add-product",
-  "/admin/all-products",
-];
+const protectedRoutes = ["cart", "checkout", "account", "orders", "admin"];
 
 const protectedAdminRoutes = [
   "/admin",
@@ -65,6 +57,7 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
   const [allOrdersForUser, setAllOrdersForUser] = useState<OrdersType[] | []>(
     []
   );
+  const [orderDetails, setOrderDetails] = useState<OrdersType | null>(null);
 
   const router = useRouter();
   const pathName = usePathname();
@@ -86,9 +79,10 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
 
   useEffect(() => {
     if (
+      pathName !== "/register" &&
       user &&
-      Object.keys(user).length === 0 &&
-      protectedRoutes.indexOf(pathName) > -1
+      Object.keys(user).length === 0 && 
+      protectedRoutes.includes(pathName) > -1
     ) {
       router.push("/login");
     }
@@ -105,6 +99,10 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
       router.push("/unauthorized");
     }
   }, [user, pathName]);
+
+  useEffect(() => {
+    // Use this for auto sign out of users after certain period of time.
+  }, []);
 
   return (
     <GlobalContext.Provider
@@ -133,6 +131,8 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
         setCheckoutFormData,
         allOrdersForUser,
         setAllOrdersForUser,
+        orderDetails,
+        setOrderDetails,
       }}
     >
       {children}

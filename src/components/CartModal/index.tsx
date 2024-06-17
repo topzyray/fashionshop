@@ -65,7 +65,10 @@ export default function CartModal() {
         cartItems && cartItems.length ? (
           <ul role="list" className="my-6 divide-y divide-gray-300">
             {cartItems.map((cartItem) => (
-              <li key={cartItem.productId._id} className="flex py-6">
+              <li
+                key={cartItem && cartItem.productId && cartItem.productId._id}
+                className="flex py-6"
+              >
                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                   <img
                     src={
@@ -73,7 +76,9 @@ export default function CartModal() {
                       cartItem.productId &&
                       cartItem.productId.imageUrl
                     }
-                    alt={cartItem.productId.name}
+                    alt={
+                      cartItem && cartItem.productId && cartItem.productId.name
+                    }
                     className="h-full w-full object-cover object-center"
                   />
                 </div>
@@ -81,7 +86,13 @@ export default function CartModal() {
                   <div>
                     <div className="flex justify-between text-base font-medium text-gray-900 hover:underline">
                       <h3 onClick={() => setShowCartModal(false)}>
-                        <Link href={`/product/${cartItem.productId._id}`}>
+                        <Link
+                          href={`/product/${
+                            cartItem &&
+                            cartItem.productId &&
+                            cartItem.productId._id
+                          }`}
+                        >
                           {cartItem &&
                             cartItem.productId &&
                             cartItem.productId.name}
