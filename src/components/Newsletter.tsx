@@ -59,7 +59,7 @@ export default function Newsletter() {
             }
             id="email"
             placeholder="Email address"
-            className="block min-w-[15rem] max-w-sm w-full rounded-md border-0 px-2 py-2 lg:py-3 text-[#1D2939] font-normal shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 placeholder:font-normal placeholder:text-base focus:ring-2 focus:ring-inset focus:ring-gray-300 sm:text-base sm:leading-6"
+            className="block min-w-[15rem] max-w-sm w-full lg:w-80 rounded-md border-0 px-2 py-2 lg:py-3 text-[#1D2939] font-normal shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 placeholder:font-normal placeholder:text-base focus:ring-2 focus:ring-inset focus:ring-gray-300 sm:text-base sm:leading-6"
           />
         </div>
         <button

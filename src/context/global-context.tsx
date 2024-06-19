@@ -84,6 +84,8 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
     if (
       pathName !== "/register" &&
       pathName !== "/" &&
+      !pathName.includes("/product") &&
+      !pathName.includes("/not-found") &&
       user &&
       Object.keys(user).length === 0 &&
       protectedRoutes.includes(pathName) > -1
