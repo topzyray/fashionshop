@@ -11,20 +11,15 @@ export async function GET(request: NextRequest) {
     const isAuthUser = await AuthenticateUser(request);
     if (isAuthUser) {
       if (isAuthUser && isAuthUser?.role === "admin") {
-        // const { searchParams } = new URL(request.url);
-        // const id = searchParams.get("id");
-
         const extractAllOrdersForAllUsers = await Order.find({})
-          .populate({
-            path: "orderItems.product",
-            model: "Product",
-          })
-          .populate("user", "_id name email role createdAt updatedAt"); // This line filters out what field to return
+          .populate("user", "-password")
+          .populate("orderItems.product");
 
         if (extractAllOrdersForAllUsers) {
           return NextResponse.json({
             success: true,
             status: 200,
+            message: "All orders for all user fetched successfully",
             documentCount: extractAllOrdersForAllUsers.length,
             data: extractAllOrdersForAllUsers,
           });

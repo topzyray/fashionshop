@@ -58,6 +58,7 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
     []
   );
   const [orderDetails, setOrderDetails] = useState<OrdersType | null>(null);
+  const [allOrdersForAllUsers, setAllOrdersForAllUsers] = useState<OrdersAPIType[] | []>([]);
 
   const router = useRouter();
   const pathName = usePathname();
@@ -81,7 +82,7 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
     if (
       pathName !== "/register" &&
       user &&
-      Object.keys(user).length === 0 && 
+      Object.keys(user).length === 0 &&
       protectedRoutes.includes(pathName) > -1
     ) {
       router.push("/login");
@@ -133,6 +134,8 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
         setAllOrdersForUser,
         orderDetails,
         setOrderDetails,
+        allOrdersForAllUsers,
+        setAllOrdersForAllUsers,
       }}
     >
       {children}

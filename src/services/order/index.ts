@@ -74,7 +74,7 @@ export const getAllOrdersForAllUsers = async () => {
   }
 };
 
-export const updateOrderStatus = async (formData) => {
+export const updateOrderStatus = async (formData: OrdersAPIType) => {
   try {
     const response = await fetch(`/api/admin/orders/update-order`, {
       method: "PUT",

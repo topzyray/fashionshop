@@ -61,6 +61,37 @@ type OrdersType = {
   isProcessing: boolean;
 };
 
+type OrdersAPIType = {
+  _id: string;
+  user: {
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
+  orderItems: [
+    {
+      qty: number;
+      product: string;
+      _id: string;
+    }
+  ];
+  shippingAddress: {
+    fullName: string;
+    address: string;
+    city: string;
+    country: string;
+    postalCode: string;
+  };
+  paymentMethod: string;
+  totalPrice: number;
+  isPaid: boolean;
+  paidAt: string;
+  isProcessing: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 type GlobalContextType = {
   showNavModal: boolean;
   setShowNavModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -98,4 +129,8 @@ type GlobalContextType = {
   setAllOrdersForUser: React.Dispatch<React.SetStateAction<OrdersType[] | []>>;
   orderDetails: OrdersType | null;
   setOrderDetails: React.Dispatch<React.SetStateAction<OrdersType | null>>;
+  allOrdersForAllUsers: OrdersAPIType[] | [];
+  setAllOrdersForAllUsers: React.Dispatch<
+    React.SetStateAction<OrdersAPIType[] | []>
+  >;
 };

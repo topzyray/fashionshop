@@ -26,7 +26,6 @@ export default function OrderDetailsPage({
   const fetchOrderDetails = async () => {
     setPageLevelLoader(true);
     const response = await getOrderDetails(params.details);
-    console.log(response);
 
     if (response.success) {
       setPageLevelLoader(false);
@@ -66,9 +65,21 @@ export default function OrderDetailsPage({
           <div className="px-4 py-6 sm:px-8 sm:py-10">
             <div className="flow-root">
               <div className="bg-white rounded-lg shadow p-4 flex flex-col space-y-3 py-6 text-left">
-                <div className="flex flex-col space-y-3 py-6">
-                  <h1 className="text-lg lg:text-3xl text-left font-bold leading-7 lg:leading-9 text-dark-blue">
-                    Order #{orderDetails && orderDetails._id}
+                <div className="flex flex-col space-y-3 py-6 ">
+                  <h1
+                    className={`text-lg lg:text-2xl text-left font-bold leading-7 lg:leading-9 ${
+                      orderDetails && orderDetails.isProcessing
+                        ? "text-yellow-600"
+                        : "text-green-600"
+                    }`}
+                  >
+                    Order Status:{" "}
+                    {orderDetails && orderDetails.isProcessing
+                      ? "Processing"
+                      : "Deliver"}
+                  </h1>
+                  <h1 className="overflow-x-clip text-lg lg:text-2xl text-left font-bold leading-7 lg:leading-9 text-dark-blue">
+                    Order Id: {orderDetails && orderDetails._id}
                   </h1>
                   <p className="text-base font-medium leading-6 text-dark-blue">
                     {orderDetails &&

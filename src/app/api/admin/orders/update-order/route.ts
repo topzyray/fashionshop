@@ -9,7 +9,7 @@ export async function PUT(request: NextRequest) {
   try {
     await connectToDB();
     const isAuthUser = await AuthenticateUser(request);
-    const data = request.json();
+    const data = await request.json();
 
     if (isAuthUser) {
       if (isAuthUser && isAuthUser?.role === "admin") {
@@ -33,10 +33,10 @@ export async function PUT(request: NextRequest) {
             paidAt,
             isProcessing,
           },
-          {
-            new: true,
-          }
+          { new: true }
         );
+
+        console.log(updateOrder);
 
         if (updateOrder) {
           return NextResponse.json({

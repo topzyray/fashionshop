@@ -90,6 +90,7 @@ function NavItems({
             <button
               onClick={() => {
                 setShowNavModal(false);
+                setShowCartModal(false);
                 router.push("/account");
               }}
               className="btn-small"
@@ -228,7 +229,10 @@ export default function Navbar() {
             {!isAdminView && isAuthUser ? (
               <Fragment>
                 <button
-                  onClick={() => router.push("/account")}
+                  onClick={() => {
+                    setShowCartModal(false);
+                    router.push("/account");
+                  }}
                   className="btn-small"
                 >
                   Account

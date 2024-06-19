@@ -70,7 +70,7 @@ export default function Orders() {
                       >
                         <div className="flex flex-col md:flex-row">
                           <h1 className="font-semibold sm:font-bold text-lg mb-3 flex-1">
-                            #Order: {item._id}
+                            Order Id: {item._id}
                           </h1>
                           <div className="flex items-center">
                             <p className="mr-3 text-sm font-medium text-gray-900">
@@ -97,7 +97,13 @@ export default function Orders() {
                           ))}
                         </div>
                         <div className="flex flex-col sm:flex-row gap-1 sm:gap-4">
-                          <button className="btn-small">
+                          <button
+                            className={`btn-small ${
+                              item.isProcessing
+                                ? "bg-yellow-600"
+                                : "bg-green-600"
+                            }`}
+                          >
                             {item.isProcessing
                               ? "Order is Processing"
                               : "Order is delivered"}
