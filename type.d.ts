@@ -33,6 +33,7 @@ interface CheckoutFormData {
   isPaid: boolean;
   paidAt: Date;
   isProcessing: boolean;
+  processedBy: string;
 }
 
 type GlobalContextProviderProps = {
@@ -59,6 +60,7 @@ type OrdersType = {
   isPaid: boolean;
   paidAt: Date;
   isProcessing: boolean;
+  processedBy: string;
 };
 
 type OrdersAPIType = {
@@ -88,6 +90,7 @@ type OrdersAPIType = {
   isPaid: boolean;
   paidAt: string;
   isProcessing: boolean;
+  processedBy: string;
   createdAt: string;
   updatedAt: string;
 };

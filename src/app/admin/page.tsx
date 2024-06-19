@@ -10,8 +10,6 @@ import { PulseLoader } from "react-spinners";
 import { toast, ToastPosition } from "react-toastify";
 
 export default function Admin() {
-  const router = useRouter();
-
   const {
     user,
     allOrdersForAllUsers,
@@ -57,6 +55,7 @@ export default function Admin() {
     const response = await updateOrderStatus({
       ...orderItem,
       isProcessing: false,
+      processedBy: user?._id,
     });
     if (response.success) {
       toast.success(response.message, {
@@ -98,8 +97,8 @@ export default function Admin() {
                     className="bg-white rounded-lg shadow p-4 flex flex-col space-y-3 py-6 text-left"
                   >
                     <div className="flex flex-col md:flex-row">
-                      <h1 className="font-semibold sm:font-bold text-lg mb-3 flex-1">
-                        #Order: {item._id}
+                      <h1 className="font-semibold sm:font-bold text-lg mb-3 flex-1 overflow-x-clip">
+                        Order Id: {item._id}
                       </h1>
                       <div className="flex-1 flex flex-col gap-2">
                         <div className="flex gap-2">
@@ -143,37 +142,50 @@ export default function Admin() {
                         </div>
                       ))}
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-1 sm:gap-4">
-                      <button
-                        className={`btn-small ${
-                          item.isProcessing ? "bg-yellow-600" : "bg-green-600"
-                        }`}
-                      >
-                        {item.isProcessing
-                          ? "Order is Processing"
-                          : "Order is delivered"}
-                      </button>
-                      <button
-                        onClick={() => handleOrderProcessing(item)}
-                        disabled={!item.isProcessing}
-                        className="btn-small"
-                      >
-                        {componentLevelLoader &&
-                        componentLevelLoader.loading &&
-                        componentLevelLoader.id === item._id ? (
-                          <ComponentLevelLoader
-                            text="Updating Order Status"
-                            color="#ffffff"
-                            loading={
-                              componentLevelLoader &&
-                              componentLevelLoader.loading &&
-                              componentLevelLoader.id === item._id
-                            }
-                          />
-                        ) : (
-                          "Update Order Status"
-                        )}
-                      </button>
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-col sm:flex-row gap-1 sm:gap-4">
+                        <button
+                          className={`btn-small ${
+                            item.isProcessing ? "bg-yellow-600" : "bg-green-600"
+                          }`}
+                        >
+                          {item.isProcessing
+                            ? "Order is Processing"
+                            : "Order is delivered"}
+                        </button>
+                        <button
+                          onClick={() => handleOrderProcessing(item)}
+                          disabled={!item.isProcessing}
+                          className="btn-small"
+                        >
+                          {componentLevelLoader &&
+                          componentLevelLoader.loading &&
+                          componentLevelLoader.id === item._id ? (
+                            <ComponentLevelLoader
+                              text="Updating Order Status"
+                              color="#ffffff"
+                              loading={
+                                componentLevelLoader &&
+                                componentLevelLoader.loading &&
+                                componentLevelLoader.id === item._id
+                              }
+                            />
+                          ) : (
+                            "Update Order Status"
+                          )}
+                        </button>
+                      </div>
+
+                      <div className="flex gap-2 justify-end">
+                        <p className="text-base font-medium text-gray-900">
+                          Processed By:
+                        </p>
+                        <p className="text-base  font-semibold text-gray-900">
+                          {item.processedBy && item.processedBy?.name
+                            ? item.processedBy?.name
+                            : "Pending"}
+                        </p>
+                      </div>
                     </div>
                   </li>
                 ))}

@@ -13,7 +13,8 @@ export async function GET(request: NextRequest) {
       if (isAuthUser && isAuthUser?.role === "admin") {
         const extractAllOrdersForAllUsers = await Order.find({})
           .populate("user", "-password")
-          .populate("orderItems.product");
+          .populate("orderItems.product")
+          .populate("processedBy", "name _id");
 
         if (extractAllOrdersForAllUsers) {
           return NextResponse.json({

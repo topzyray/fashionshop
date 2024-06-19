@@ -78,6 +78,7 @@ export default function Checkout() {
             .toFixed(2),
           isPaid: true,
           isProcessing: true,
+          processedby: "",
           paidAt: new Date(),
         };
 

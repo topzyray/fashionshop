@@ -30,6 +30,12 @@ const OrderSchema = new mongoose.Schema(
     isPaid: { type: Boolean, required: true },
     paidAt: { type: Date, required: true },
     isProcessing: { type: Boolean, required: true },
+    processedBy:
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: User,
+        // default: "",
+      } || String,
   },
   { timestamps: true }
 );

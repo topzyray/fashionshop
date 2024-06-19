@@ -21,6 +21,7 @@ export async function PUT(request: NextRequest) {
           isPaid,
           paidAt,
           isProcessing,
+          processedBy,
         } = data;
 
         const updateOrder = await Order.findOneAndUpdate(
@@ -32,11 +33,10 @@ export async function PUT(request: NextRequest) {
             isPaid,
             paidAt,
             isProcessing,
+            processedBy,
           },
           { new: true }
         );
-
-        console.log(updateOrder);
 
         if (updateOrder) {
           return NextResponse.json({

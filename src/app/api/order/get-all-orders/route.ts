@@ -14,10 +14,12 @@ export async function GET(request: NextRequest) {
       const { searchParams } = new URL(request.url);
       const id = searchParams.get("id");
 
-      const extractAllOrders = await Order.find({ user: id }).populate({
-        path: "orderItems.product",
-        model: "Product",
-      });
+      const extractAllOrders = await Order.find({ user: id })
+        .populate({
+          path: "orderItems.product",
+          model: "Product",
+        })
+        .populate("processedBy", "name");
 
       if (extractAllOrders) {
         return NextResponse.json({

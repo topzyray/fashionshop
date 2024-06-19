@@ -58,7 +58,9 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
     []
   );
   const [orderDetails, setOrderDetails] = useState<OrdersType | null>(null);
-  const [allOrdersForAllUsers, setAllOrdersForAllUsers] = useState<OrdersAPIType[] | []>([]);
+  const [allOrdersForAllUsers, setAllOrdersForAllUsers] = useState<
+    OrdersAPIType[] | []
+  >([]);
 
   const router = useRouter();
   const pathName = usePathname();
@@ -81,6 +83,7 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
   useEffect(() => {
     if (
       pathName !== "/register" &&
+      pathName !== "/" &&
       user &&
       Object.keys(user).length === 0 &&
       protectedRoutes.includes(pathName) > -1

@@ -64,21 +64,35 @@ export default function OrderDetailsPage({
         <div className="mt-4 mx-auto max-w-screen-lg px-0 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-8 sm:py-10">
             <div className="flow-root">
-              <div className="bg-white rounded-lg shadow p-4 flex flex-col space-y-3 py-6 text-left">
+              <div className="bg-white rounded-lg shadow px-4 flex flex-col space-y-3 pb-6 text-left">
                 <div className="flex flex-col space-y-3 py-6 ">
-                  <h1
-                    className={`text-lg lg:text-2xl text-left font-bold leading-7 lg:leading-9 ${
-                      orderDetails && orderDetails.isProcessing
-                        ? "text-yellow-600"
-                        : "text-green-600"
-                    }`}
-                  >
-                    Order Status:{" "}
-                    {orderDetails && orderDetails.isProcessing
-                      ? "Processing"
-                      : "Deliver"}
-                  </h1>
-                  <h1 className="overflow-x-clip text-lg lg:text-2xl text-left font-bold leading-7 lg:leading-9 text-dark-blue">
+                  <div className="flex flex-col-reverse md:flex-row md:justify-between gap-2">
+                    <h1
+                      className={`text-lg lg:text-2xl text-left font-bold leading-7 lg:leading-9 ${
+                        orderDetails && orderDetails.isProcessing
+                          ? "text-yellow-600"
+                          : "text-green-600"
+                      }`}
+                    >
+                      Order Status:{" "}
+                      {orderDetails && orderDetails.isProcessing
+                        ? "Processing"
+                        : "Deliver"}
+                    </h1>
+                    <div className="flex gap-2 justify-end items-center">
+                      <p className="text-base font-medium text-gray-900">
+                        Processed By:
+                      </p>
+                      <p className="text-base  font-semibold text-gray-900">
+                        {orderDetails &&
+                        orderDetails.processedBy &&
+                        orderDetails.processedBy?.name
+                          ? orderDetails.processedBy?.name
+                          : "Pending"}
+                      </p>
+                    </div>
+                  </div>
+                  <h1 className="overflow-x-clip text-base text-left font-medium leading-7 lg:leading-9 text-dark-blue">
                     Order Id: {orderDetails && orderDetails._id}
                   </h1>
                   <p className="text-base font-medium leading-6 text-dark-blue">

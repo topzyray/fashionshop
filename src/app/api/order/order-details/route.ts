@@ -22,10 +22,12 @@ export async function GET(request: NextRequest) {
         });
       }
 
-      const extractOrderDetails = await Order.findById(id).populate({
-        path: "orderItems.product",
-        model: "Product",
-      });
+      const extractOrderDetails = await Order.findById(id)
+        .populate({
+          path: "orderItems.product",
+          model: "Product",
+        })
+        .populate("processedBy", "name");
 
       if (extractOrderDetails) {
         return NextResponse.json({

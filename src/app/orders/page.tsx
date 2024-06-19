@@ -96,24 +96,37 @@ export default function Orders() {
                             </div>
                           ))}
                         </div>
-                        <div className="flex flex-col sm:flex-row gap-1 sm:gap-4">
-                          <button
-                            className={`btn-small ${
-                              item.isProcessing
-                                ? "bg-yellow-600"
-                                : "bg-green-600"
-                            }`}
-                          >
-                            {item.isProcessing
-                              ? "Order is Processing"
-                              : "Order is delivered"}
-                          </button>
-                          <button
-                            onClick={() => router.push(`/orders/${item._id}`)}
-                            className="btn-small"
-                          >
-                            View Order Details
-                          </button>
+                        <div className="flex flex-col gap-4">
+                          <div className="flex flex-col sm:flex-row gap-1 sm:gap-4">
+                            <button
+                              className={`btn-small ${
+                                item.isProcessing
+                                  ? "bg-yellow-600"
+                                  : "bg-green-600"
+                              }`}
+                            >
+                              {item.isProcessing
+                                ? "Order is Processing"
+                                : "Order is delivered"}
+                            </button>
+                            <button
+                              onClick={() => router.push(`/orders/${item._id}`)}
+                              className="btn-small"
+                            >
+                              View Order Details
+                            </button>
+                          </div>
+
+                          <div className="flex gap-2 justify-end">
+                            <p className="text-base font-medium text-gray-900">
+                              Processed By:
+                            </p>
+                            <p className="text-base  font-semibold text-gray-900">
+                              {item.processedBy && item.processedBy?.name
+                                ? item.processedBy?.name
+                                : "Pending"}
+                            </p>
+                          </div>
                         </div>
                       </li>
                     ))}
