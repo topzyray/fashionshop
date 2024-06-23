@@ -21,24 +21,28 @@ export default function Orders() {
 
   const fetchAllOrders = async () => {
     setPageLevelLoader(true);
-    const response = await getAllOrdersForAUser(user?._id);
+    if (user !== null) {
+      const response = await getAllOrdersForAUser(user?._id);
 
-    if (response.success) {
-      setPageLevelLoader(false);
-      setAllOrdersForUser(response.data);
-      toast.success(response.message, {
-        position: "top-right" as ToastPosition,
-      });
-    } else {
-      setPageLevelLoader(false);
-      toast.error(response.message, {
-        position: "top-right" as ToastPosition,
-      });
+      if (response.success) {
+        setPageLevelLoader(false);
+        setAllOrdersForUser(response.data);
+        toast.success(response.message, {
+          position: "top-right" as ToastPosition,
+        });
+      } else {
+        setPageLevelLoader(false);
+        toast.error(response.message, {
+          position: "top-right" as ToastPosition,
+        });
+      }
     }
   };
 
   useEffect(() => {
-    if (user !== null) fetchAllOrders();
+    if (user !== null) {
+      fetchAllOrders();
+    }
   }, [user]);
 
   if (pageLevelLoader) {
@@ -141,7 +145,7 @@ export default function Orders() {
           </div>
         </div>
       </div>
-      <Notification />
+      {/* <Notification /> */}
     </section>
   );
 }

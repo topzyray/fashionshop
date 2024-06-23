@@ -1,7 +1,6 @@
 "use client";
 
 import InputComponent from "@/components/FormElements/InputComponent";
-import SelectComponent from "@/components/FormElements/SelectComponent";
 import ComponentLevelLoader from "@/components/Loaders/ComponentLevelLoader";
 import Notification from "@/components/Notification";
 import { GlobalContext } from "@/context/global-context";
@@ -107,23 +106,6 @@ export default function Register() {
                           ]
                         }
                       />
-                    ) : controlItem.componentType === "select" ? (
-                      <SelectComponent
-                        key={controlItem.id}
-                        options={controlItem.options}
-                        label={controlItem.label}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            [controlItem.id]: e.target.value,
-                          })
-                        }
-                        value={
-                          formData[
-                            controlItem.id as keyof typeof initialFormData
-                          ]
-                        }
-                      />
                     ) : null
                   )}
                   <button
@@ -158,7 +140,7 @@ export default function Register() {
           </div>
         </div>
       </div>
-      <Notification />
+      {/* <Notification /> */}
     </section>
   );
 }

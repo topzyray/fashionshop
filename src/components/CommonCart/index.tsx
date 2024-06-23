@@ -257,7 +257,7 @@ export default function CommonCart({
           </div>
         </div>
       </div>
-      <Notification />
+      {/* <Notification /> */}
     </section>
   );
 }

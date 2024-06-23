@@ -52,13 +52,13 @@ export default function CommonDetails({ data }: { data: ProductDetailsProps }) {
   };
 
   return (
-    <section className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 mt-8 lg:mt-12">
+    <section className="bg-gray-100 w-full min-h-screen">
+      <div className="max-w-screen-xl mx-auto lg:bg-white my-8 lg:my-12 p-6 rounded-lg">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-8 ">
           <div className="lg:col-span-3 lg:row-end-1">
             <div className="lg:flex lg:items-start">
-              <div className="lg:order-2 lg:ml-5">
-                <div className="max-w-xl overflow-hidden rounded-lg">
+              <div className="lg:order-2 lg:ml-5 h-[20rem] md:h-[25rem] lg:h-[40rem] w-full">
+                <div className="w-full h-full overflow-hidden rounded-lg ">
                   <img
                     src={data.imageUrl}
                     alt={data.name}
@@ -68,10 +68,10 @@ export default function CommonDetails({ data }: { data: ProductDetailsProps }) {
               </div>
 
               <div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
-                <div className="flex flex-row items-start lg:flex-col">
+                <div className="flex flex-row items-start lg:flex-col gap-4 w-full">
                   <button
                     type="button"
-                    className="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-gray-100 text-center"
+                    className="flex-0 h-20 w-20 lg:w-full overflow-hidden rounded-lg border-2 border-gray-100 text-center"
                   >
                     <img
                       src={data.imageUrl}
@@ -81,7 +81,7 @@ export default function CommonDetails({ data }: { data: ProductDetailsProps }) {
                   </button>
                   <button
                     type="button"
-                    className="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-gray-100 text-center"
+                    className="flex-0 h-20 w-20 lg:w-full overflow-hidden rounded-lg border-2 border-gray-100 text-center"
                   >
                     <img
                       src={data.imageUrl}
@@ -95,24 +95,26 @@ export default function CommonDetails({ data }: { data: ProductDetailsProps }) {
           </div>
 
           <div className="lg:col-span-2 lg:row-span-2 lg:row-end-2">
-            <h1 className="text-2xl font-bold text-gray-900">{data.name}</h1>
-            <div className="mt-10 flex flex-col justify-between items-center space-y-4 border-t py-4 sm:flex-row sm:space-y-0">
+            <div className="border-t md:border-none pt-5 md:pt-0">
+              <h1 className="text-2xl font-bold text-gray-900">{data.name}</h1>
+            </div>
+            <div className="mt-5 flex flex-col justify-between items-start space-y-4 border-t py-4 sm:flex-row sm:space-y-0">
               <div className="flex items-center gap-2">
                 <h1
-                  className={`text-2xl font-bold ${
+                  className={`text-lg lg:text-2xl font-bold ${
                     data.onSale === "yes" ? "line-through" : ""
                   }`}
                 >
                   $ {data.price}
                 </h1>
                 {data.onSale === "yes" ? (
-                  <h1 className="text-2xl font-bold text-red-600">{`$${(
+                  <h1 className="text-lg lg:text-2xl font-bold text-red-600">{`$${(
                     data.price -
                     data.price * (data.priceDrop / 100)
                   ).toFixed(2)}`}</h1>
                 ) : null}
                 {data.onSale === "yes" ? (
-                  <h1 className="text-sm font-semibold self-end">
+                  <h1 className="text-sm font-semibold ">
                     -(${data.priceDrop}%)off
                   </h1>
                 ) : null}
@@ -137,7 +139,7 @@ export default function CommonDetails({ data }: { data: ProductDetailsProps }) {
                 )}
               </button>
             </div>
-            <ul className="mt-8 space-y-2">
+            <ul className="mt-3 space-y-2">
               <li className="flex items-center text-left text-sm font-medium text-gray-600">
                 {data.deliveryInfo}
               </li>
@@ -161,7 +163,7 @@ export default function CommonDetails({ data }: { data: ProductDetailsProps }) {
           </div>
         </div>
       </div>
-      <Notification />
+      {/* <Notification /> */}
     </section>
   );
 }

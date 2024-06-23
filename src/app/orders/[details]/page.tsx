@@ -236,7 +236,7 @@ export default function OrderDetailsPage({
           </div>
         </div>
       </div>
-      <Notification />
+      {/* <Notification /> */}
     </section>
   );
 }

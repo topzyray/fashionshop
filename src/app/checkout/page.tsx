@@ -1,19 +1,19 @@
 "use client";
 
+import ComponentLevelLoader from "@/components/Loaders/ComponentLevelLoader";
 import Notification from "@/components/Notification";
 import { GlobalContext } from "@/context/global-context";
 import { getAllAddress } from "@/services/address";
 import { createNewOrder } from "@/services/order";
 import { callStripeSession } from "@/services/stripe";
 import { loadStripe } from "@stripe/stripe-js";
-import { Item } from "firebase/analytics";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { PulseLoader } from "react-spinners";
 import { toast, ToastPosition } from "react-toastify";
 
 export default function Checkout() {
-  const [selectedAddress, setSelectedAddress] = useState<boolean | null>(null);
+  const [selectedAddress, setSelectedAddress] = useState<string | null>("");
   const [isOrderProcessing, setIsOrderProcessing] = useState<boolean>(false);
   const [orderSuccess, setOrderSuccess] = useState<boolean>(false);
   const {
@@ -23,6 +23,8 @@ export default function Checkout() {
     setAddresses,
     checkoutFormData,
     setCheckoutFormData,
+    componentLevelLoader,
+    setComponentLevelLoader,
   } = useContext(GlobalContext);
   const router = useRouter();
   const params = useSearchParams();
@@ -46,7 +48,12 @@ export default function Checkout() {
 
   useEffect(() => {
     const createFinalOrder = async () => {
-      const isStripe = JSON.parse(localStorage.getItem("stripe"));
+      const isStripeString = localStorage.getItem("stripe");
+      let isStripe;
+      if (isStripeString !== null) {
+        isStripe = JSON.parse(isStripeString);
+      }
+
       if (
         isStripe &&
         params.get("status") === "success" &&
@@ -54,9 +61,12 @@ export default function Checkout() {
         cartItems.length > 0
       ) {
         setIsOrderProcessing(true);
-        const getCheckoutFormData = JSON.parse(
-          localStorage.getItem("checkoutFormData")
-        );
+        const getCheckoutFormDataString =
+          localStorage.getItem("checkoutFormData");
+        let getCheckoutFormData;
+        if (getCheckoutFormDataString !== null) {
+          getCheckoutFormData = JSON.parse(getCheckoutFormDataString);
+        }
 
         const createFinalCheckoutFormData = {
           user: user?._id,
@@ -81,7 +91,6 @@ export default function Checkout() {
           processedby: "",
           paidAt: new Date(),
         };
-
         const response = await createNewOrder(createFinalCheckoutFormData);
         if (response.success) {
           setIsOrderProcessing(false);
@@ -103,7 +112,7 @@ export default function Checkout() {
     createFinalOrder();
   }, [params.get("status"), cartItems]);
 
-  const handleSelectedAddress = (getAddress) => {
+  const handleSelectedAddress = (getAddress: AddressFormData) => {
     if (getAddress._id === selectedAddress) {
       setSelectedAddress(null);
       setCheckoutFormData({
@@ -132,6 +141,8 @@ export default function Checkout() {
   const stripePromise = loadStripe(publishableKey);
 
   const handleCheckout = async () => {
+    setComponentLevelLoader({ loading: true, id: "" });
+
     const stripe = await stripePromise;
     const createLineItems = cartItems.map((item) => ({
       price_data: {
@@ -153,14 +164,16 @@ export default function Checkout() {
     }));
 
     const response = await callStripeSession(createLineItems);
+    setComponentLevelLoader({ loading: false, id: "" });
+
     setIsOrderProcessing(true);
-    localStorage.setItem("stripe", true);
+    localStorage.setItem("stripe", JSON.stringify(true));
     localStorage.setItem("checkoutFormData", JSON.stringify(checkoutFormData));
 
     const { error } = await stripe?.redirectToCheckout({
       sessionId: response.id,
     });
-    console.log(error);
+    // console.log(error);
   };
 
   useEffect(() => {
@@ -352,14 +365,24 @@ export default function Checkout() {
                   type="button"
                   className="btn-small mt-5"
                 >
-                  Checkout
+                  {componentLevelLoader && componentLevelLoader.loading ? (
+                    <ComponentLevelLoader
+                      text="Checking out"
+                      color="#ffffff"
+                      loading={
+                        componentLevelLoader && componentLevelLoader.loading
+                      }
+                    />
+                  ) : (
+                    "Checkout"
+                  )}
                 </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Notification />
+      {/* <Notification /> */}
     </section>
   );
 }

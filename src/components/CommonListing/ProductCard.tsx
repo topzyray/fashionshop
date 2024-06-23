@@ -4,15 +4,17 @@ import { ProductDetailsProps } from ".";
 export default function ProductCard({ item }: { item: ProductDetailsProps }) {
   return (
     <div className="">
-      <div className=" aspect-video h-auto">
-        <Image
-          src={item.imageUrl}
-          alt={item.name}
-          width={100}
-          height={100}
-          className="rounded-t-xl h-full w-full object-cover transition-all ease-in-out duration-300 group-hover:scale-125"
-          priority
-        />
+      <div className="">
+        <div className="h-44">
+          <Image
+            src={item.imageUrl}
+            alt={item.name}
+            width={100}
+            height={100}
+            className="rounded-t-xl h-full w-full object-cover transition-all ease-in-out duration-300 group-hover:scale-125"
+            priority
+          />
+        </div>
         {item.onSale === "yes" ? (
           <div className="absolute z-10 top-0 m-2 rounded-full bg-dark-blue">
             <p className="rounded-full bg-red-600 p-1 text-[8px] font-bold uppercase tracking-wide text-white sm:py-1 sm:px-3">

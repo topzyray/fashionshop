@@ -47,11 +47,9 @@ export default function Login() {
     setComponentLevelLoader({ loading: true, id: "" });
     const response = await loginUser(formData);
     if (response.success) {
-      // Display toast message
       toast.success(response.message, {
         position: "top-right" as ToastPosition,
       });
-
       setIsAuthUser(true);
       setUser(response?.data?.user);
       setFormData(initialFormData);
@@ -60,11 +58,9 @@ export default function Login() {
       setComponentLevelLoader({ loading: false, id: "" });
       router.push("/");
     } else {
-      // Display toast message
       toast.error(response.message, {
         position: "top-right" as ToastPosition,
       });
-
       setIsAuthUser(false);
       setComponentLevelLoader({ loading: false, id: "" });
     }
@@ -137,7 +133,7 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <Notification />
+      {/* <Notification /> */}
     </section>
   );
 }

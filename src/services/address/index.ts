@@ -29,7 +29,7 @@ export const addNewAddress = async (formData: AddressFormData) => {
 export const getAllAddress = async (id: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/address/get-all-address?id=${id}`,
+      `${process.env.NEXT_PUBLIC_HOST_URL}/api/address/get-all-address?id=${id}`,
       {
         cache: "no-store",
         headers: {

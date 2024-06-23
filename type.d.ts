@@ -17,14 +17,24 @@ type User = {
   role: string;
 };
 
-interface AddressFormData {
+type InitialAddressFormType = {
   fullName: string;
   address: string;
   city: string;
   country: string;
   postalCode: string;
   userId: string;
-}
+};
+
+type AddressFormData = {
+  _id: string;
+  fullName: string;
+  address: string;
+  city: string;
+  country: string;
+  postalCode: string;
+  userId: string;
+};
 
 interface CheckoutFormData {
   shippingAddress: {};
@@ -58,9 +68,9 @@ type OrdersType = {
   paymentMethod: string;
   totalPrice: number;
   isPaid: boolean;
-  paidAt: Date;
+  paidAt: string;
   isProcessing: boolean;
-  processedBy: string;
+  processedBy?: string;
 };
 
 type OrdersAPIType = {
@@ -74,7 +84,18 @@ type OrdersAPIType = {
   orderItems: [
     {
       qty: number;
-      product: string;
+      product: {
+        _id: string;
+        name: string;
+        description: string;
+        price: number;
+        category: string;
+        sizes: string[];
+        deliveryInfo: string;
+        onSale: string;
+        priceDrop: number;
+        imageUrl: string;
+      };
       _id: string;
     }
   ];
@@ -90,7 +111,7 @@ type OrdersAPIType = {
   isPaid: boolean;
   paidAt: string;
   isProcessing: boolean;
-  processedBy: string;
+  processedBy?: { name: string; _id: string };
   createdAt: string;
   updatedAt: string;
 };
@@ -100,8 +121,8 @@ type GlobalContextType = {
   setShowNavModal: React.Dispatch<React.SetStateAction<boolean>>;
   isAuthUser: boolean;
   setIsAuthUser: React.Dispatch<React.SetStateAction<boolean>>;
-  user: User | null | {};
-  setUser: React.Dispatch<React.SetStateAction<User | null | {}>>;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   pageLevelLoader: boolean;
   setPageLevelLoader: React.Dispatch<React.SetStateAction<boolean>>;
   componentLevelLoader: {
@@ -124,14 +145,16 @@ type GlobalContextType = {
   setCartItems: React.Dispatch<React.SetStateAction<CartItem[] | []>>;
   addresses: AddressFormData[] | [];
   setAddresses: React.Dispatch<React.SetStateAction<AddressFormData[] | []>>;
-  addressFormData: AddressFormData;
-  setAddressFormData: React.Dispatch<React.SetStateAction<AddressFormData>>;
+  addressFormData: AddressFormData | InitialAddressFormType;
+  setAddressFormData: React.Dispatch<
+    React.SetStateAction<AddressFormData | InitialAddressFormType>
+  >;
   checkoutFormData: CheckoutFormData;
   setCheckoutFormData: React.Dispatch<React.SetStateAction<CheckoutFormData>>;
-  allOrdersForUser: OrdersType[] | [];
-  setAllOrdersForUser: React.Dispatch<React.SetStateAction<OrdersType[] | []>>;
-  orderDetails: OrdersType | null;
-  setOrderDetails: React.Dispatch<React.SetStateAction<OrdersType | null>>;
+  allOrdersForUser: OrdersAPIType[] | [];
+  setAllOrdersForUser: React.Dispatch<React.SetStateAction<OrdersAPIType[] | []>>;
+  orderDetails: OrdersAPIType | null;
+  setOrderDetails: React.Dispatch<React.SetStateAction<OrdersAPIType | null>>;
   allOrdersForAllUsers: OrdersAPIType[] | [];
   setAllOrdersForAllUsers: React.Dispatch<
     React.SetStateAction<OrdersAPIType[] | []>

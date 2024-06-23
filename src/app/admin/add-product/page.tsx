@@ -156,15 +156,6 @@ export default function AdminAddNewProduc() {
     }
   }, [currentUpdatedProduct]);
 
-  // useEffect(() => {
-  //   if (isAuthUser && user?.role !== "admin") {
-  //     router.push("/");
-  //   }
-  //   if (!isAuthUser) {
-  //     router.push("/login");
-  //   }
-  // }, [user, isAuthUser]);
-
   return (
     <section className="w-full mt-5 mr-0 mb-5 ml-0 px-5 relative">
       <div className="max-w-xl flex flex-col items-center justify-start mx-auto p-5 sm:p-10 bg-white shadow-2xl rounded-xl relative">
@@ -259,7 +250,7 @@ export default function AdminAddNewProduc() {
           </button>
         </div>
       </div>
-      <Notification />
+      {/* <Notification /> */}
     </section>
   );
 }

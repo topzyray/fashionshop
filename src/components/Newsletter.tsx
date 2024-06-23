@@ -81,7 +81,7 @@ export default function Newsletter() {
           )}
         </button>
       </form>
-      <Notification />
+      {/* <Notification /> */}
     </section>
   );
 }

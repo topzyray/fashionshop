@@ -24,7 +24,7 @@ export const addCartItem = async (formData: {
 export const getAllCartItems = async (id: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/cart/all-cart-items?id=${id}`,
+      `${process.env.NEXT_PUBLIC_HOST_URL}/api/cart/all-cart-items?id=${id}`,
       {
         method: "GET",
         headers: {

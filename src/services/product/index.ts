@@ -22,7 +22,7 @@ export const addNewProduct = async (formData: ProductDetailsProps) => {
 export const getAllProducts = async () => {
   try {
     const response = await fetch(
-      "http://localhost:3000/api/client/all-products",
+      `${process.env.NEXT_PUBLIC_HOST_URL}/api/client/all-products`,
       { method: "GET", cache: "no-store" }
     );
 
@@ -70,7 +70,7 @@ export const deleteProduct = async (id: string) => {
 export const getProductByCategory = async (category: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/client/product-by-category?category=${category}`,
+      `${process.env.NEXT_PUBLIC_HOST_URL}/api/client/product-by-category?category=${category}`,
       {
         method: "GET",
         cache: "no-store",
@@ -87,7 +87,7 @@ export const getProductByCategory = async (category: string) => {
 export const getProductById = async (id: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/client/product-by-id?id=${id}`,
+      `${process.env.NEXT_PUBLIC_HOST_URL}/api/client/product-by-id?id=${id}`,
       {
         method: "GET",
         cache: "no-store",

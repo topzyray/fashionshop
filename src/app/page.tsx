@@ -1,6 +1,7 @@
 "use client";
 
 import { ProductDetailsProps } from "@/components/CommonListing";
+import Notification from "@/components/Notification";
 import { getAllProducts } from "@/services/product";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -30,7 +31,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between px-4 pb-8 py-0 lg:py-24">
+    <main className="flex min-h-screen flex-col items-center justify-between px-0 pb-8 py-0 sm:px-4 lg:py-24">
       <section className="">
         <div className="grid max-w-screen-xl px-4 py-8 mx-suto  lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
           <div className="mr-auto place-self-center lg:col-span-7">
@@ -89,11 +90,11 @@ export default function Home() {
                           className="cursor-pointer"
                           key={productItem._id}
                         >
-                          <div>
+                          <div className="h-40 sm:h-64">
                             <img
                               src={productItem.imageUrl}
                               alt="Sale Product Item"
-                              className="object-cover w-full rounded aspect-square"
+                              className="object-cover w-full h-full rounded"
                             />
                           </div>
                           <div className="mt-3">
@@ -184,6 +185,7 @@ export default function Home() {
           </ul>
         </div>
       </section>
+      <Notification />
     </main>
   );
 }

@@ -34,10 +34,6 @@ export default function CartPage() {
   };
 
   useEffect(() => {
-    if (user === null) {
-      router.push("/login");
-      return;
-    }
     if (user !== null) {
       fetchAllCartItems();
     }

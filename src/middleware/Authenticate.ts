@@ -6,12 +6,15 @@ export const dynamic = "force-dynamic";
 
 const AuthenticateUser = async (request: NextRequest) => {
   const token = request.headers.get("Authorization")?.split(" ")[1];
+
   if (!token) {
     return false;
   }
 
   try {
     const decodeAuthtUserInfo = jwt.verify(token, process.env.JWT_SECRET);
+    // console.log(decodeAuthtUserInfo);
+
     return decodeAuthtUserInfo;
   } catch (err) {
     console.log("Error: " + err);

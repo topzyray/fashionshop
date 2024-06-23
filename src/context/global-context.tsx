@@ -8,7 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 export const GlobalContext = createContext({} as GlobalContextType); // Type assertion
 
-export const initialAddressFormData = {
+export const initialAddressFormData: InitialAddressFormType = {
   fullName: "",
   address: "",
   city: "",
@@ -24,9 +24,18 @@ export const initialCheckoutFormData = {
   isPaid: false,
   paidAt: new Date(),
   isProcessing: true,
+  processedBy: "",
 };
 
-const protectedRoutes = ["cart", "checkout", "account", "orders", "admin"];
+const protectedRoutes = [
+  "/cart",
+  "/checkout",
+  "/account",
+  "/orders",
+  "/admin",
+  "/admin/add-product",
+  "/admin/all-products",
+];
 
 const protectedAdminRoutes = [
   "/admin",
@@ -42,22 +51,22 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
     id: "",
   });
   const [isAuthUser, setIsAuthUser] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null | {}>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [currentUpdatedProduct, setCurrentUpdatedProduct] =
     useState<ProductDetailsProps | null>(null);
   const [showCartModal, setShowCartModal] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<CartItem[] | []>([]);
   const [addresses, setAddresses] = useState<AddressFormData[] | []>([]);
-  const [addressFormData, setAddressFormData] = useState<AddressFormData>(
-    initialAddressFormData
-  );
+  const [addressFormData, setAddressFormData] = useState<
+    AddressFormData | InitialAddressFormType
+  >(initialAddressFormData);
   const [checkoutFormData, setCheckoutFormData] = useState<CheckoutFormData>(
     initialCheckoutFormData
   );
-  const [allOrdersForUser, setAllOrdersForUser] = useState<OrdersType[] | []>(
-    []
-  );
-  const [orderDetails, setOrderDetails] = useState<OrdersType | null>(null);
+  const [allOrdersForUser, setAllOrdersForUser] = useState<
+    OrdersAPIType[] | []
+  >([]);
+  const [orderDetails, setOrderDetails] = useState<OrdersAPIType | null>(null);
   const [allOrdersForAllUsers, setAllOrdersForAllUsers] = useState<
     OrdersAPIType[] | []
   >([]);
@@ -68,43 +77,55 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
   useEffect(() => {
     if (Cookies.get("token") !== undefined) {
       setIsAuthUser(true);
-      const userData = JSON.parse(localStorage.getItem("user")) || ({} as User);
-      const cartItemsData = JSON.parse(localStorage.getItem("cartItems")) || [];
-      const addressesData = JSON.parse(localStorage.getItem("addresses")) || [];
+      const userDataString = localStorage.getItem("user");
+      let userData;
+      if (userDataString !== null) {
+        userData = JSON.parse(userDataString);
+      }
+      const cartItemsDataString = localStorage.getItem("cartItems");
+      let cartItemsData;
+      if (cartItemsDataString !== null) {
+        cartItemsData = JSON.parse(cartItemsDataString);
+      }
+      const addressesDataString = localStorage.getItem("addresses");
+      let addressesData;
+      if (addressesDataString !== null) {
+        addressesData = JSON.parse(addressesDataString);
+      }
       setUser(userData);
       setCartItems(cartItemsData);
       setAddresses(addressesData);
     } else {
       setIsAuthUser(false);
-      setUser({});
+      setUser(null);
     }
   }, [Cookies]);
 
-  useEffect(() => {
-    if (
-      pathName !== "/register" &&
-      pathName !== "/" &&
-      !pathName.includes("/product") &&
-      !pathName.includes("/not-found") &&
-      user &&
-      Object.keys(user).length === 0 &&
-      protectedRoutes.includes(pathName) > -1
-    ) {
-      router.push("/login");
-    }
-  }, [user, pathName]);
+  // useEffect(() => {
+  //   if (
+  //     pathName !== "/register" &&
+  //     pathName !== "/" &&
+  //     !pathName.includes("/product") &&
+  //     !pathName.includes("/not-found") &&
+  //     user &&
+  //     Object.keys(user).length === 0 &&
+  //     protectedRoutes.indexOf(pathName) > -1
+  //   ) {
+  //     router.push("/login");
+  //   }
+  // }, [user, pathName]);
 
-  useEffect(() => {
-    if (
-      user !== null &&
-      user &&
-      Object.keys(user).length > 0 &&
-      user?.role !== "admin" &&
-      protectedAdminRoutes.indexOf(pathName) > -1
-    ) {
-      router.push("/unauthorized");
-    }
-  }, [user, pathName]);
+  // useEffect(() => {
+  //   if (
+  //     user !== null &&
+  //     user &&
+  //     Object.keys(user).length > 0 &&
+  //     user?.role !== "admin" &&
+  //     protectedAdminRoutes.indexOf(pathName) > -1
+  //   ) {
+  //     router.push("/unauthorized");
+  //   }
+  // }, [user, pathName]);
 
   useEffect(() => {
     // Use this for auto sign out of users after certain period of time.

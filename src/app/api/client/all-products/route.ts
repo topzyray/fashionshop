@@ -4,10 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     await connectToDB();
     const allProducts = await Product.find({});
+    
     if (allProducts) {
       return NextResponse.json({
         success: true,

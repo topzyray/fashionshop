@@ -3,7 +3,7 @@
 import InputComponent from "@/components/FormElements/InputComponent";
 import ComponentLevelLoader from "@/components/Loaders/ComponentLevelLoader";
 import Notification from "@/components/Notification";
-import { AddressFormData, GlobalContext } from "@/context/global-context";
+import { GlobalContext } from "@/context/global-context";
 import {
   addNewAddress,
   deleteAddress,
@@ -15,16 +15,6 @@ import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { PulseLoader } from "react-spinners";
 import { toast, ToastPosition } from "react-toastify";
-
-// type CurrentUpdateAddress = {
-//   _id: string;
-//   fullName: string;
-//   address: string;
-//   city: string;
-//   country: string;
-//   postalCode: string;
-//   userId: string;
-// };
 
 export default function AccountPage() {
   const [loadingAddress, setLoadingAddress] = useState(true);
@@ -110,10 +100,10 @@ export default function AccountPage() {
     }
   };
 
-  const handleDeleteAdress = async (addressId: string) => {
+  const handleDeleteAdress = async (address: AddressFormData) => {
     if (user !== null) {
-      setComponentLevelLoader({ loading: true, id: addressId });
-      const response = await deleteAddress(addressId);
+      setComponentLevelLoader({ loading: true, id: address._id });
+      const response = await deleteAddress(address._id);
       console.log(response);
       if (response.success) {
         setComponentLevelLoader({ loading: false, id: "" });
@@ -139,25 +129,20 @@ export default function AccountPage() {
   return (
     <section className="min-h-screen bg-gray-100">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow rounded-lg max-w-3xl mx-auto my-10">
+        <div className="bg-white shadow rounded-lg max-w-4xl mx-auto my-10">
           <div className="p-6 sm:p-12">
             <div>
               <div className="flex flex-col space-y-4 md:space-y-0 md:space-x-6 md:flex-row">
                 {/* For rendering user random image */}
               </div>
 
-              <div className="flex flex-col flex-1">
-                <h4 className="text-lg font-semibold text-left">
-                  {user?.name}
+              <div className="flex flex-col flex-1 ">
+                <h4 className="text-lg font-semibold text-left capitalize">
+                  {user && user?.name}
                 </h4>
-                <p className="text-sm text-left">
-                  {user && user?.email}
-                </p>
-                <p className="text-sm text-left">
+                <p className="text-sm text-left">{user && user?.email}</p>
+                <p className="text-sm text-left capitalize">
                   {user && user?.role}
-                  {/* {user &&
-                    user?.role.slice(0, 1).toUpperCase() +
-                      user?.role.slice(1).toLowerCase()} */}
                 </p>
               </div>
               <button
@@ -182,7 +167,7 @@ export default function AccountPage() {
               ) : (
                 <div className="mt-4 max-w-sm flex flex-col gap-4">
                   {addresses && addresses.length ? (
-                    addresses.map((address) => (
+                    addresses.map((address: AddressFormData) => (
                       <div key={address._id} className="border p-6">
                         <p>Name: {address.fullName}</p>
                         <p>Address: {address.address}</p>
@@ -201,7 +186,7 @@ export default function AccountPage() {
                             Update
                           </button>
                           <button
-                            onClick={() => handleDeleteAdress(address._id)}
+                            onClick={() => handleDeleteAdress(address)}
                             type="button"
                             className="btn-small bg-red-700 mt-5"
                           >
@@ -289,7 +274,7 @@ export default function AccountPage() {
           </div>
         </div>
       </div>
-      <Notification />
+      {/* <Notification /> */}
     </section>
   );
 }

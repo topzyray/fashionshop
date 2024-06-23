@@ -1,12 +1,8 @@
 "use client";
 
 import { Fragment, useContext, useEffect } from "react";
-import { GlobalContext, User } from "@/context/global-context";
-import {
-  adminNavOptions,
-  clientNavOptions,
-  NavOptionsType,
-} from "@/utils/index";
+import { GlobalContext } from "@/context/global-context";
+import { adminNavOptions, clientNavOptions } from "@/utils/index";
 import CommonModal from "./CommonModal";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import Cookies from "js-cookie";

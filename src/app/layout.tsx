@@ -4,6 +4,7 @@ import "./globals.css";
 import GlobalState from "@/context/global-context";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Notification from "@/components/Notification";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <Notification />
         </GlobalState>
       </body>
     </html>

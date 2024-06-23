@@ -1,8 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
 import Newsletter from "./Newsletter";
 
 const Footer = () => {
@@ -30,7 +26,7 @@ const Footer = () => {
           </section>
 
           <section className="text-center">
-            <p className="text-base">© 2023, FashionShop or its affiliates</p>
+            <p className="text-base">© 2024, FashionShop or its affiliates</p>
           </section>
         </section>
       </section>

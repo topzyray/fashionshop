@@ -1,6 +1,21 @@
 import Cookies from "js-cookie";
 
-export const createNewOrder = async (formData: OrdersType) => {
+type NewOrderType = {
+  user: string | undefined;
+  shippingAddress: any;
+  orderItems: {
+      qty: number;
+      product: any;
+  }[];
+  paymentMethod: string;
+  totalPrice: any;
+  isPaid: boolean;
+  isProcessing: boolean;
+  processedby: string;
+  paidAt: Date;
+}
+
+export const createNewOrder = async (formData: NewOrderType) => {
   try {
     const response = await fetch("/api/order/create-order", {
       method: "POST",
@@ -20,7 +35,7 @@ export const createNewOrder = async (formData: OrdersType) => {
 export const getAllOrdersForAUser = async (userId: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/order/get-all-orders?id=${userId}`,
+      `${process.env.NEXT_PUBLIC_HOST_URL}/api/order/get-all-orders?id=${userId}`,
       {
         method: "GET",
         headers: {
@@ -39,7 +54,7 @@ export const getAllOrdersForAUser = async (userId: string) => {
 export const getOrderDetails = async (orderId: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/order/order-details?id=${orderId}`,
+      `${process.env.NEXT_PUBLIC_HOST_URL}/api/order/order-details?id=${orderId}`,
       {
         method: "GET",
         headers: {
@@ -58,7 +73,7 @@ export const getOrderDetails = async (orderId: string) => {
 export const getAllOrdersForAllUsers = async () => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/admin/orders/get-all-orders`,
+      `${process.env.NEXT_PUBLIC_HOST_URL}/api/admin/orders/get-all-orders`,
       {
         method: "GET",
         headers: {

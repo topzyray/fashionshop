@@ -4,7 +4,6 @@ import ComponentLevelLoader from "@/components/Loaders/ComponentLevelLoader";
 import Notification from "@/components/Notification";
 import { GlobalContext } from "@/context/global-context";
 import { getAllOrdersForAllUsers, updateOrderStatus } from "@/services/order";
-import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 import { PulseLoader } from "react-spinners";
 import { toast, ToastPosition } from "react-toastify";
@@ -87,20 +86,20 @@ export default function Admin() {
   return (
     <section className="min-h-screen bg-gray-100">
       <div className="mx-auto px-0 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-8 sm:py-10">
-          <div className="flow-root">
+        <div className="px-4 py-6 sm:px-8 sm:py-10 max-w-4xl mx-auto">
+          <div className="flow-root ">
             {allOrdersForAllUsers && allOrdersForAllUsers.length ? (
-              <ul className="flex flex-col gap-4">
+              <ul className="flex flex-col gap-4 ">
                 {allOrdersForAllUsers.map((item) => (
                   <li
                     key={item._id}
                     className="bg-white rounded-lg shadow p-4 flex flex-col space-y-3 py-6 text-left"
                   >
-                    <div className="flex flex-col md:flex-row">
-                      <h1 className="font-semibold sm:font-bold text-lg mb-3 flex-1 overflow-x-clip">
+                    <div className="flex flex-col md:flex-row md:justify-between">
+                      <h1 className="font-semibold sm:font-bold text-lg mb-3 overflow-x-clip">
                         Order Id: {item._id}
                       </h1>
-                      <div className="flex-1 flex flex-col gap-2">
+                      <div className="flex flex-col gap-2">
                         <div className="flex gap-2">
                           <p className="text-base font-medium text-gray-900">
                             User Name:
@@ -170,8 +169,10 @@ export default function Admin() {
                                 componentLevelLoader.id === item._id
                               }
                             />
-                          ) : (
+                          ) : item.isProcessing ? (
                             "Update Order Status"
+                          ) : (
+                            "Order Status Updated"
                           )}
                         </button>
                       </div>
@@ -198,7 +199,7 @@ export default function Admin() {
           </div>
         </div>
       </div>
-      <Notification />
+      {/* <Notification /> */}
     </section>
   );
 }
