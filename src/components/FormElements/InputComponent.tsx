@@ -25,7 +25,7 @@ export default function InputComponent({
         type={type || "text"}
         value={value}
         onChange={onChange}
-        className="border placeholder-gray-400 focus:outline-none focus:border-dark-blue w-full pt-2.5 pr-4 pb-2.5 pl-4 sm:pt-3 sm:pb-3 mr-0 mt-0 ml-0 text-base block bg-white border-gray-300 rounded-md"
+        className="border placeholder-gray-400 focus:outline-none focus:border-dark-blue w-full pt-2 pr-4 pb-2 pl-4 sm:pt-2 sm:pb-2 mr-0 mt-0 ml-0 text-base block bg-white border-gray-300 rounded-md"
       />
     </div>
   );

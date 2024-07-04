@@ -17,6 +17,7 @@ export default function Home() {
   const fetchAllProducts = async () => {
     setPageLevelLoader(true);
     const response = await getAllProducts();
+
     if (response.success) {
       setAllProducts(response.data);
       setPageLevelLoader(false);

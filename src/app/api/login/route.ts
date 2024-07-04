@@ -2,8 +2,9 @@ import connectToDB from "@/database";
 import User from "@/models/user";
 import Joi from "joi";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { SignJWT } from "jose";
 import { NextRequest, NextResponse } from "next/server";
+import { getJwtSecretKey } from "@/utils/constants";
 
 const schema = Joi.object({
   email: Joi.string().email().required(),
@@ -30,7 +31,8 @@ export async function POST(request: NextRequest) {
   try {
     // Check user already exists
     const checkUser = await User.findOne({ email });
-    if (!checkUser) {
+
+    if (checkUser === null) {
       return NextResponse.json({
         success: false,
         message: "User not found.",
@@ -45,19 +47,17 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Check if JWT_SECRET is defined
-    if (!process.env.JWT_SECRET) {
-      throw new Error("JWT_SECRET is not defined in environment variables");
-    }
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: checkUser._id, email: checkUser?.email, role: checkUser?.role },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1d",
-      }
-    );
+    const token = await new SignJWT({
+      id: checkUser._id,
+      email: checkUser?.email,
+      role: checkUser?.role,
+    })
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      // .setIssuer("urn:example:issuer")
+      // .setAudience("urn:example:audience")
+      .setExpirationTime("1d")
+      .sign(new TextEncoder().encode(getJwtSecretKey()));
 
     const finalData = {
       token,

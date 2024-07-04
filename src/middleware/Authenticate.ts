@@ -1,4 +1,6 @@
-import jwt from "jsonwebtoken";
+// import { getJwtSecretKey } from "@/utils/constants";
+import { UserJwtPayload, verifyAuth } from "@/utils/jwtAuth";
+// import { jwtVerify } from "jose";
 
 import { NextRequest } from "next/server";
 
@@ -12,10 +14,8 @@ const AuthenticateUser = async (request: NextRequest) => {
   }
 
   try {
-    const decodeAuthtUserInfo = jwt.verify(token, process.env.JWT_SECRET);
-    // console.log(decodeAuthtUserInfo);
-
-    return decodeAuthtUserInfo;
+    const decodeAuthtUserInfo = await verifyAuth(request);
+    return decodeAuthtUserInfo as UserJwtPayload;
   } catch (err) {
     console.log("Error: " + err);
   }

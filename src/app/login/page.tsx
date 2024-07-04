@@ -46,6 +46,7 @@ export default function Login() {
   const handleFormSubmit = async () => {
     setComponentLevelLoader({ loading: true, id: "" });
     const response = await loginUser(formData);
+
     if (response.success) {
       toast.success(response.message, {
         position: "top-right" as ToastPosition,
@@ -77,8 +78,8 @@ export default function Login() {
       <div className="flex flex-col items-center justify-between pt-0 pb-0 mt-8 mr-auto xl:px-5 lg:flex-row">
         <div className="flex flex-col justify-center items-center w-full px-4 md:pr-10 md:pl-10 lg:flex-row">
           <div className="w-full mt-10 mr-0 mb-0 ml-0 relative max-w-2xl lg:mt-0 lg:w-5/12">
-            <div className="max-w-md mx-auto flex flex-col items-center justify-start pr-4 pl-4 pt-10 md:pr-10 pb-10 md:pl-10 bg-white md:shadow-2xl rounded-xl relative z-10">
-              <p className="w-full text-4xl font-medium text-center font-serif">
+            <div className="max-w-sm mx-auto flex flex-col items-center justify-start pr-4 pl-4 pt-10 md:pr-10 pb-10 md:pl-10 bg-white md:shadow-xl rounded-xl relative z-10">
+              <p className="w-full text-2xl font-medium text-center font-serif">
                 Login
               </p>
 
@@ -105,7 +106,7 @@ export default function Login() {
                 <button
                   onClick={handleFormSubmit}
                   disabled={!validateFormInput()}
-                  className="btn-large"
+                  className="btn-small w-full"
                 >
                   {componentLevelLoader && componentLevelLoader.loading ? (
                     <ComponentLevelLoader
@@ -123,7 +124,7 @@ export default function Login() {
                   <p>New to website?</p>
                   <button
                     onClick={() => router.push("/register")}
-                    className="btn-large"
+                    className="btn-small"
                   >
                     Register
                   </button>
