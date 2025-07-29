@@ -160,3 +160,5 @@ type GlobalContextType = {
     React.SetStateAction<OrdersAPIType[] | []>
   >;
 };
+
+type AddressKeys = keyof AddressFormData | keyof InitialAddressFormType;

@@ -120,7 +120,7 @@ export default function CommonDetails({ data }: { data: ProductDetailsProps }) {
                 ) : null}
               </div>
               <button
-                onClick={() => handleAddToCart(data)}
+                onClick={() => handleAddToCart(data as any)}
                 type="button"
                 className="btn-small"
               >

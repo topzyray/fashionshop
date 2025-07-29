@@ -77,8 +77,6 @@ const initialFormData = {
 export default function AdminAddNewProduc() {
   const router = useRouter();
   const {
-    isAuthUser,
-    user,
     componentLevelLoader,
     setComponentLevelLoader,
     currentUpdatedProduct,

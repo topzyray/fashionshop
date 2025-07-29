@@ -27,22 +27,6 @@ export const initialCheckoutFormData = {
   processedBy: "",
 };
 
-const protectedRoutes = [
-  "/cart",
-  "/checkout",
-  "/account",
-  "/orders",
-  "/admin",
-  "/admin/add-product",
-  "/admin/all-products",
-];
-
-const protectedAdminRoutes = [
-  "/admin",
-  "/admin/add-product",
-  "/admin/all-products",
-];
-
 export default function GlobalState({ children }: GlobalContextProviderProps) {
   const [showNavModal, setShowNavModal] = useState<boolean>(false);
   const [pageLevelLoader, setPageLevelLoader] = useState<boolean>(true);
@@ -71,9 +55,6 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
     OrdersAPIType[] | []
   >([]);
 
-  const router = useRouter();
-  const pathName = usePathname();
-
   useEffect(() => {
     if (Cookies.get("token") !== undefined) {
       setIsAuthUser(true);
@@ -99,33 +80,7 @@ export default function GlobalState({ children }: GlobalContextProviderProps) {
       setIsAuthUser(false);
       setUser(null);
     }
-  }, [Cookies]);
-
-  // useEffect(() => {
-  //   if (
-  //     pathName !== "/register" &&
-  //     pathName !== "/" &&
-  //     !pathName.includes("/product") &&
-  //     !pathName.includes("/not-found") &&
-  //     user &&
-  //     Object.keys(user).length === 0 &&
-  //     protectedRoutes.indexOf(pathName) > -1
-  //   ) {
-  //     router.push("/login");
-  //   }
-  // }, [user, pathName]);
-
-  // useEffect(() => {
-  //   if (
-  //     user !== null &&
-  //     user &&
-  //     Object.keys(user).length > 0 &&
-  //     user?.role !== "admin" &&
-  //     protectedAdminRoutes.indexOf(pathName) > -1
-  //   ) {
-  //     router.push("/unauthorized");
-  //   }
-  // }, [user, pathName]);
+  }, [user, cartItems, addresses, isAuthUser]);
 
   useEffect(() => {
     // Use this for auto sign out of users after certain period of time.

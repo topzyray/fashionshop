@@ -1,14 +1,15 @@
 "use client";
 
 import ComponentLevelLoader from "@/components/Loaders/ComponentLevelLoader";
-import Notification from "@/components/Notification";
+// import Notification from "@/components/Notification";
 import { GlobalContext } from "@/context/global-context";
 import { getAllAddress } from "@/services/address";
 import { createNewOrder } from "@/services/order";
 import { callStripeSession } from "@/services/stripe";
 import { loadStripe } from "@stripe/stripe-js";
+import PageLoader from "next/dist/client/page-loader";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
+import React, { Suspense, useContext, useEffect, useState } from "react";
 import { PulseLoader } from "react-spinners";
 import { toast, ToastPosition } from "react-toastify";
 
@@ -170,10 +171,12 @@ export default function Checkout() {
     localStorage.setItem("stripe", JSON.stringify(true));
     localStorage.setItem("checkoutFormData", JSON.stringify(checkoutFormData));
 
-    const { error } = await stripe?.redirectToCheckout({
+    const redirectResponse = await stripe?.redirectToCheckout({
       sessionId: response.id,
     });
-    // console.log(error);
+    if (redirectResponse?.error) {
+      console.log(redirectResponse?.error);
+    }
   };
 
   useEffect(() => {
@@ -186,28 +189,41 @@ export default function Checkout() {
 
   if (orderSuccess) {
     return (
-      <section className="h-screen bg-gray-200">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto mt-8 max-w-screen-sm px-4 sm:px-6 lg:px-8">
-            <div className="bg-white shadow">
-              <div className="px-4 py-6 sm:px-8 sm:py-10 flex flex-col justify-center items-center gap-5">
-                <h1 className="font-medium text-base sm:text-lg text-center">
-                  Your payment is successful and you will be redirected to
-                  orders page in 3 seconds. If you were not redirected, please
-                  click{" "}
-                  <span
-                    onClick={() => router.push("/orders")}
-                    className="font-bold hover:underline"
-                  >
-                    here
-                  </span>{" "}
-                  to visit the orders page.
-                </h1>
+      <Suspense
+        fallback={
+          <section className="w-full min-h-screen flex justify-center items-center">
+            <PulseLoader
+              color={"#1d2939"}
+              loading={true}
+              size={20}
+              data-testid="loader"
+            />
+          </section>
+        }
+      >
+        <section className="h-screen bg-gray-200">
+          <div className="mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto mt-8 max-w-screen-sm px-4 sm:px-6 lg:px-8">
+              <div className="bg-white shadow">
+                <div className="px-4 py-6 sm:px-8 sm:py-10 flex flex-col justify-center items-center gap-5">
+                  <h1 className="font-medium text-base sm:text-lg text-center">
+                    Your payment is successful and you will be redirected to
+                    orders page in 3 seconds. If you were not redirected, please
+                    click{" "}
+                    <span
+                      onClick={() => router.push("/orders")}
+                      className="font-bold hover:underline"
+                    >
+                      here
+                    </span>{" "}
+                    to visit the orders page.
+                  </h1>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </Suspense>
     );
   }
 

@@ -18,7 +18,7 @@ export default function Home() {
     setPageLevelLoader(true);
     const response = await getAllProducts();
 
-    if (response.success) {
+    if (response?.success) {
       setAllProducts(response.data);
       setPageLevelLoader(false);
     } else {
@@ -112,7 +112,7 @@ export default function Home() {
                   : null}
               </ul>
 
-              {pageLevelLoader && (
+              {pageLevelLoader ? (
                 <div className="flex justify-center items-center">
                   <PulseLoader
                     color={"#1d2939"}
@@ -121,6 +121,10 @@ export default function Home() {
                     data-testid="loader"
                   />
                 </div>
+              ) : (
+                <p className="flex justify-center items-center text-center font-semibold text-lg md:text-xl">
+                  No product available at the moment!
+                </p>
               )}
             </div>
           </div>
